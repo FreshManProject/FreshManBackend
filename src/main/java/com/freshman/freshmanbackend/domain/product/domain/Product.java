@@ -1,0 +1,102 @@
+package com.freshman.freshmanbackend.domain.product.domain;
+
+import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
+import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/**
+ * 상품 엔티티
+ */
+@Entity
+@Getter
+@NoArgsConstructor
+@Table(name = "PRODUCT")
+public class Product extends BaseTimeEntity {
+
+  /**
+   * 상품 일련번호
+   */
+  @Id
+  @Column(name = "PRD_SEQ", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long productSeq;
+  /**
+   * 상품명
+   */
+  @Column(name = "PRD_NM", nullable = false)
+  private String name;
+  /**
+   * 가격
+   */
+  @Column(name = "PRD_PRC", nullable = false)
+  private Long price;
+  /**
+   * 설명
+   */
+  @Column(name = "PRD_DESC", nullable = false)
+  private String description;
+  /**
+   * 브랜드명
+   */
+  @Column(name = "PRD_BRND", nullable = false)
+  private String brand;
+  /**
+   * 상품 카테고리
+   */
+  @ManyToOne
+  @JoinColumn(name = "PRD_CTG_SEQ")
+  private ProductCategory category;
+  /**
+   * 유효여부
+   */
+  @Convert(converter = Valid.TypeCodeConverter.class)
+  @Column(name = "PRD_VLD", nullable = false)
+  private Valid valid = Valid.TRUE;
+  /**
+   * 상품 이미지 목록
+   */
+  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private final List<ProductImage> imageList = new ArrayList<>();
+
+  public Product(String name, Long price, String description, String brand, ProductCategory category) {
+    this.name = name;
+    this.price = price;
+    this.description = description;
+    this.brand = brand;
+    this.category = category;
+  }
+
+  /**
+   * 상품 이미지 목록 추가
+   *
+   * @param addImageList 이미지 목록
+   */
+  public void addImageList(List<ProductImage> addImageList) {
+    if (Objects.isNull(addImageList) || addImageList.isEmpty()) {
+      return;
+    }
+
+    for (ProductImage image : addImageList) {
+      this.imageList.add(image);
+      image.setProduct(this);
+    }
+  }
+}
