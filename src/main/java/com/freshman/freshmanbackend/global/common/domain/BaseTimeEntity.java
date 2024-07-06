@@ -24,12 +24,12 @@ public class BaseTimeEntity {
    * 등록일시
    */
   @CreatedDate
-  @Column(name = "CRE_DT", updatable = false, nullable = false)
-  protected LocalDateTime createdDt;
+  @Column(name = "CRE_DTM", updatable = false, nullable = false)
+  protected LocalDateTime createAt;
   /**
    * 수정일시
    */
   @CreatedDate
-  @Column(name = "UPD_DT", nullable = false)
-  protected LocalDateTime updatedDt;
+  @Column(name = "UPD_DTM", nullable = false)
+  protected LocalDateTime updatedAt;
 }
