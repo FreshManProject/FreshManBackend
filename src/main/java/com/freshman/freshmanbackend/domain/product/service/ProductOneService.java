@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.domain.product.service;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.repository.ProductRepository;
+import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,6 @@ public class ProductOneService {
    */
   @Transactional(readOnly = true)
   public Product getOne(Long productSeq) {
-    return productRepository.findById(productSeq).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+    return productRepository.findById(productSeq).orElseThrow(() -> new ValidationException("product.not_found"));
   }
 }

@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.domain.product.service;
 
 import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
 import com.freshman.freshmanbackend.domain.product.repository.ProductCategoryRepository;
+import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,6 @@ public class ProductCategoryOneService {
   @Transactional(readOnly = true)
   public ProductCategory getOne(Long categorySeq) {
     return productCategoryRepository.findById(categorySeq)
-                                    .orElseThrow(() -> new IllegalArgumentException("상품 카테고리를 찾을 수 없습니다."));
+                                    .orElseThrow(() -> new ValidationException("product.category.not_found"));
   }
 }

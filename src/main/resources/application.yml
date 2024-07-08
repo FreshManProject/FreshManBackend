@@ -14,3 +14,9 @@ spring:
       hibernate:
         show_sql: true
     database: mysql
+
+  messages:
+    basename: messages/validation
+    encoding: UTF-8
+    fallbackToSystemLocale: false
+    alwaysUseMessageFormat: true
