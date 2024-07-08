@@ -1,0 +1,92 @@
+package com.freshman.freshmanbackend.domain.product.dao;
+
+import com.freshman.freshmanbackend.domain.product.domain.QProduct;
+import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
+import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
+import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
+import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ConstructorExpression;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Objects;
+
+import lombok.RequiredArgsConstructor;
+
+/**
+ * 상품 목록 조회 DAO
+ */
+@Repository
+@RequiredArgsConstructor
+public class ProductListDao {
+
+  private final JPAQueryFactory queryFactory;
+
+  /**
+   * 상품 목록 조회
+   *
+   * @param param 요청 파라미터
+   * @return 상품 목록
+   */
+  public List<ProductListResponse> select(ProductListRequest param) {
+    QProduct product = QProduct.product;
+
+    return queryFactory.select(getProjection())
+                       .from(product)
+                       .where(getCondition(param))
+                       .orderBy(getOrder(param.getSort()))
+                       .fetch();
+  }
+
+  /**
+   * 상품 목록 조회 조건 반환
+   */
+  private BooleanBuilder getCondition(ProductListRequest param) {
+    BooleanBuilder booleanBuilder = new BooleanBuilder();
+    QProduct product = QProduct.product;
+
+    // 유효여부
+    booleanBuilder.and(product.valid.eq(Valid.TRUE));
+    // 카테고리
+    booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));
+
+    // 낮은 가격
+    if (Objects.nonNull(param.getLowPrice())) {
+      booleanBuilder.and(product.price.goe(param.getLowPrice()));
+    }
+    // 높은 가격
+    if (Objects.nonNull(param.getHighPrice())) {
+      booleanBuilder.and(product.price.loe(param.getHighPrice()));
+    }
+
+    return booleanBuilder;
+  }
+
+  private OrderSpecifier<?> getOrder(String sort) {
+    QProduct product = QProduct.product;
+
+    if (StringUtils.isBlank(sort)) {
+      return product.createAt.desc();
+    }
+
+    if (StringUtils.equals(sort, ProductSortType.NEWEST.getCode())) {
+      return product.createAt.desc();
+    } else if (StringUtils.equals(sort, ProductSortType.HIGHEST.getCode())) {
+      return product.price.desc();
+    } else {
+      return product.price.asc();
+    }
+  }
+
+  private ConstructorExpression<ProductListResponse> getProjection() {
+    QProduct product = QProduct.product;
+    return Projections.constructor(ProductListResponse.class, product.productSeq, product.name, product.price,
+        product.brand);
+  }
+}
