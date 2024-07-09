@@ -1,7 +1,8 @@
-package com.freshman.freshmanbackend.domain.product.service;
+package com.freshman.freshmanbackend.domain.product.service.query;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.repository.ProductRepository;
+import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
 import org.springframework.stereotype.Service;
@@ -27,7 +28,8 @@ public class ProductOneService {
    * @return 상품 엔티티
    */
   @Transactional(readOnly = true)
-  public Product getOne(Long productSeq) {
-    return productRepository.findById(productSeq).orElseThrow(() -> new ValidationException("product.not_found"));
+  public Product getOne(Long productSeq, Valid valid) {
+    return productRepository.findByProductSeqAndValid(productSeq, valid)
+                            .orElseThrow(() -> new ValidationException("product.not_found"));
   }
 }

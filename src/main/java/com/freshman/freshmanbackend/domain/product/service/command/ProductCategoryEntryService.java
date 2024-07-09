@@ -1,4 +1,4 @@
-package com.freshman.freshmanbackend.domain.product.service;
+package com.freshman.freshmanbackend.domain.product.service.command;
 
 import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
 import com.freshman.freshmanbackend.domain.product.repository.ProductCategoryRepository;

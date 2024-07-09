@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "PRODUCT_CATEGORY")
 public class ProductCategory {
-  
+
   /**
    * 상품 카테고리 일련번호
    */
@@ -39,5 +39,12 @@ public class ProductCategory {
   public ProductCategory(String name, Integer order) {
     this.name = name;
     this.order = order;
+  }
+
+  /**
+   * 카테고리 정보 수정
+   */
+  public void update(String name) {
+    this.name = name;
   }
 }
