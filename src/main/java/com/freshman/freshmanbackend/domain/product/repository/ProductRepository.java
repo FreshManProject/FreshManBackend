@@ -1,8 +1,11 @@
 package com.freshman.freshmanbackend.domain.product.repository;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
+import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 /**
  * 상품 JPA Repository
@@ -10,4 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author 송병선
  */
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
+  Optional<Product> findByProductSeqAndValid(Long productSeq, Valid valid);
 }

@@ -1,4 +1,4 @@
-package com.freshman.freshmanbackend.domain.product.service;
+package com.freshman.freshmanbackend.domain.product.service.query;
 
 import com.freshman.freshmanbackend.domain.product.dao.ProductListDao;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;

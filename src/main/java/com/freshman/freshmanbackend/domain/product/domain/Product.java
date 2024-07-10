@@ -99,4 +99,22 @@ public class Product extends BaseTimeEntity {
       image.setProduct(this);
     }
   }
+
+  /**
+   * 상품 삭제
+   */
+  public void delete() {
+    this.valid = Valid.FALSE;
+  }
+
+  /**
+   * 상품 정보 수정
+   */
+  public void update(String name, Long price, String description, String brand, ProductCategory category) {
+    this.name = name;
+    this.price = price;
+    this.description = description;
+    this.brand = brand;
+    this.category = category;
+  }
 }

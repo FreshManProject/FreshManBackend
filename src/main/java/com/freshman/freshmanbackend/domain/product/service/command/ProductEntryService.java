@@ -1,9 +1,10 @@
-package com.freshman.freshmanbackend.domain.product.service;
+package com.freshman.freshmanbackend.domain.product.service.command;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
 import com.freshman.freshmanbackend.domain.product.repository.ProductRepository;
 import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
+import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryOneService;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
