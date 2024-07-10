@@ -7,18 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -75,6 +64,11 @@ public class Product extends BaseTimeEntity {
    */
   @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private final List<ProductImage> imageList = new ArrayList<>();
+  /**
+   * 상품 할인정보
+   */
+  @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private ProductSale sale;
 
   public Product(String name, Long price, String description, String brand, ProductCategory category) {
     this.name = name;
@@ -82,6 +76,21 @@ public class Product extends BaseTimeEntity {
     this.description = description;
     this.brand = brand;
     this.category = category;
+  }
+
+  /**
+   * 상품 할인정보 등록
+   */
+  public void addSale(ProductSale sale) {
+    this.sale = sale;
+    sale.setProduct(this);
+  }
+
+  /**
+   * 상품 할인정보 삭제
+   */
+  public void deleteSale() {
+    this.sale = null;
   }
 
   /**
