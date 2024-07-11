@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "PRODUCT_DISCOUNT")
+@Table(name = "PRODUCT_SALE")
 public class ProductSale extends BaseTimeEntity {
 
   /**
@@ -53,6 +53,15 @@ public class ProductSale extends BaseTimeEntity {
   private Product product;
 
   public ProductSale(Long salePrice, LocalDateTime saleStartAt, LocalDateTime saleEndAt) {
+    this.salePrice = salePrice;
+    this.saleStartAt = saleStartAt;
+    this.saleEndAt = saleEndAt;
+  }
+
+  /**
+   * 할인정보 수정
+   */
+  public void update(Long salePrice, LocalDateTime saleStartAt, LocalDateTime saleEndAt) {
     this.salePrice = salePrice;
     this.saleStartAt = saleStartAt;
     this.saleEndAt = saleEndAt;

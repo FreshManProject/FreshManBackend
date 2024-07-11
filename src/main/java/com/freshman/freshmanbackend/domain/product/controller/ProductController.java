@@ -6,6 +6,7 @@ import com.freshman.freshmanbackend.domain.product.request.ProductCategoryModify
 import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
+import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryModifyService;
@@ -79,6 +80,20 @@ public class ProductController {
   }
 
   /**
+   * 상품 할인정보 삭제
+   *
+   * @param productSeq 상품 일련번호
+   * @return 요청 결과
+   */
+  @DeleteMapping("/sales")
+  public ResponseEntity<?> doDeleteSale(@RequestParam(required = false) Long productSeq) {
+    ProductValidator.validateProductSeq(productSeq);
+
+    productDeleteService.deleteSale(productSeq);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
    * 상품 카테고리 목록 조회
    *
    * @return 요청 결과
@@ -130,6 +145,20 @@ public class ProductController {
   }
 
   /**
+   * 상품 할인정보 등록
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @PostMapping("/sales")
+  public ResponseEntity<?> doPostSale(@RequestBody ProductSaleRequest param) {
+    ProductValidator.validate(param);
+
+    productEntryService.entry(param);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
    * 상품 수정
    *
    * @param param 요청 파라미터
@@ -154,6 +183,20 @@ public class ProductController {
     ProductValidator.validate(param);
 
     productCategoryModifyService.modify(param);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
+   * 상품 할인정보 수정
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @PutMapping("/sales")
+  public ResponseEntity<?> doPutSale(@RequestBody ProductSaleRequest param) {
+    ProductValidator.validate(param);
+
+    productModifyService.modify(param);
     return ResponseEntity.ok(new SuccessResponse());
   }
 }

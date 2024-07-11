@@ -79,6 +79,24 @@ public class DateTimeUtils {
   }
 
   /**
+   * 시작일시가 종료일시보다 앞 시간인지 확인
+   *
+   * @param start 시작일시
+   * @param end   종료일시
+   * @return 시작일시 유효여부
+   */
+  public boolean isBeforeDateTime(String start, String end) {
+    if (StringUtils.isBlank(start) || StringUtils.isBlank(end)) {
+      return true;
+    }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DEFAULT_DATETIME);
+    LocalDateTime startDateTime = LocalDateTime.parse(start, formatter);
+    LocalDateTime endDateTime = LocalDateTime.parse(end, formatter);
+
+    return startDateTime.isEqual(endDateTime) || startDateTime.isBefore(endDateTime);
+  }
+
+  /**
    * 날짜 문자열 포맷 유효성 체크
    *
    * @param dateString 날짜 문자열

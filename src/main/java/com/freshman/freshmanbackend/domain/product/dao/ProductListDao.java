@@ -1,6 +1,7 @@
 package com.freshman.freshmanbackend.domain.product.dao;
 
 import com.freshman.freshmanbackend.domain.product.domain.QProduct;
+import com.freshman.freshmanbackend.domain.product.domain.QProductSale;
 import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
@@ -14,6 +15,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,9 +38,14 @@ public class ProductListDao {
    */
   public List<ProductListResponse> select(ProductListRequest param) {
     QProduct product = QProduct.product;
+    QProductSale sale = QProductSale.productSale;
+    LocalDateTime curTime = LocalDateTime.now();
 
     return queryFactory.select(getProjection())
                        .from(product)
+                       .leftJoin(sale)
+                       .on(sale.productSeq.eq(product.productSeq),
+                           sale.saleStartAt.loe(curTime).and(sale.saleEndAt.goe(curTime)))
                        .where(getCondition(param))
                        .orderBy(getOrder(param.getSort()))
                        .fetch();
@@ -86,7 +93,8 @@ public class ProductListDao {
 
   private ConstructorExpression<ProductListResponse> getProjection() {
     QProduct product = QProduct.product;
+    QProductSale sale = QProductSale.productSale;
     return Projections.constructor(ProductListResponse.class, product.productSeq, product.name, product.price,
-        product.brand);
+        sale.salePrice, product.brand);
   }
 }

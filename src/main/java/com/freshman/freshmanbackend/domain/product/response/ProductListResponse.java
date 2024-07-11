@@ -1,11 +1,14 @@
 package com.freshman.freshmanbackend.domain.product.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Getter;
 
 /**
  * 상품 목록 조회 응답
  */
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductListResponse {
 
   /**
@@ -21,6 +24,10 @@ public class ProductListResponse {
    */
   private final Long price;
   /**
+   * 할인 가격
+   */
+  private final Long salePrice;
+  /**
    * 브랜드명
    */
   private final String brand;
@@ -29,10 +36,11 @@ public class ProductListResponse {
    */
   private final String imageUrl;
 
-  public ProductListResponse(Long productSeq, String name, Long price, String brand) {
+  public ProductListResponse(Long productSeq, String name, Long price, Long salePrice, String brand) {
     this.productSeq = productSeq;
     this.name = name;
     this.price = price;
+    this.salePrice = salePrice;
     this.brand = brand;
     this.imageUrl = "";
   }

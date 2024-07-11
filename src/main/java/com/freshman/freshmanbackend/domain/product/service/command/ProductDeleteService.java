@@ -1,14 +1,15 @@
 package com.freshman.freshmanbackend.domain.product.service.command;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
-import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
-import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
-import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryOneService;
+import com.freshman.freshmanbackend.domain.product.domain.ProductSale;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
 import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
+import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,5 +36,31 @@ public class ProductDeleteService {
 
     // 상품 삭제 처리
     product.delete();
+  }
+
+  /**
+   * 상품 할인정보 삭제
+   *
+   * @param productSeq 상품 일련번호
+   */
+  @Transactional
+  public void deleteSale(Long productSeq) {
+    // 상품 조회
+    Product product = productOneService.getOne(productSeq, Valid.TRUE);
+
+    // 할인정보 존재여부 검증
+    verifySaleNotExists(product.getSale());
+
+    // 상품 할인정보 삭제 처리
+    product.deleteSale();
+  }
+
+  /**
+   * 할인정보 존재여부 검증
+   */
+  private void verifySaleNotExists(ProductSale sale) {
+    if (Objects.isNull(sale)) {
+      throw new ValidationException("product.sale.not_exists");
+    }
   }
 }

@@ -6,7 +6,9 @@ import com.freshman.freshmanbackend.domain.product.request.ProductCategoryModify
 import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
+import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
+import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,13 +47,38 @@ public class ProductValidator {
   }
 
   /**
+   * 상품 할인정보 등록/수정 요청 유효성 체크
+   *
+   * @param param 요청 파라미터
+   */
+  public void validate(ProductSaleRequest param) {
+    // 상품 일련번호
+    validateProductSeq(param.getProductSeq());
+    // 할인 가격
+    validateNull(param.getSalePrice(), "product.sale.param_sale_price_empty");
+    // 할인 시작일시
+    validateEmpty(param.getSaleStartAt(), "product.sale.param_sale_start_at_empty");
+    if (!DateTimeUtils.validFormat(param.getSaleStartAt(), DateTimeUtils.DEFAULT_DATETIME)) {
+      throw new ValidationException("datetime.param_format");
+    }
+    // 할인 종료일시
+    validateEmpty(param.getSaleEndAt(), "product.sale.param_sale_end_at_empty");
+    if (!DateTimeUtils.validFormat(param.getSaleEndAt(), DateTimeUtils.DEFAULT_DATETIME)) {
+      throw new ValidationException("datetime.param_format");
+    }
+    if (!DateTimeUtils.isBeforeDateTime(param.getSaleStartAt(), param.getSaleEndAt())) {
+      throw new ValidationException("datetime.param_end_before_start");
+    }
+  }
+
+  /**
    * 상품 카테고리 등록 요청 유효성 체크
    *
    * @param param 요청 파라미터
    */
   public void validate(ProductCategoryEntryRequest param) {
     // 카테고리명
-    validateEmpty(param.getName(), "product.category_param_name_empty");
+    validateEmpty(param.getName(), "product.category.param_name_empty");
   }
 
   /**
@@ -63,7 +90,7 @@ public class ProductValidator {
     // 카테고리 일련번호
     validateCategorySeq(param.getCategorySeq());
     // 카테고리명
-    validateEmpty(param.getName(), "product.category_param_name_empty");
+    validateEmpty(param.getName(), "product.category.param_name_empty");
   }
 
   /**
@@ -88,7 +115,7 @@ public class ProductValidator {
 
   public void validateCategorySeq(Long categorySeq) {
     // 카테고리 일련번호
-    validateNull(categorySeq, "product.category_param_seq_null");
+    validateNull(categorySeq, "product.category.param_seq_null");
   }
 
   public void validateProductSeq(Long productSeq) {
