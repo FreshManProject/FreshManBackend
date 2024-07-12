@@ -1,0 +1,27 @@
+package com.freshman.freshmanbackend.domain.member.response;
+
+import com.freshman.freshmanbackend.domain.member.domain.Member;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * 멤버 정보 응답 객체
+ */
+@Getter
+@Setter
+@AllArgsConstructor
+public class MemberInfoResponse {
+    private String name;
+    private String email;
+    private String address;
+    private String phone;
+
+    public static MemberInfoResponse toResponse(Member member) {
+        return new MemberInfoResponse(
+                member.getName(),
+                member.getEmail(),
+                member.getAddress(),
+                member.getPhoneNumber());
+    }
+}
