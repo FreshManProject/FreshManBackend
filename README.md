@@ -23,3 +23,8 @@
 ### PR 컨벤션
 
 - [TYPE] 커밋들을 포괄하는 메시지
+
+### 민감정보의 보관
+
+- application-secret.yml에 보관한다
+- application-secret의 수정사항이 생기면 디스코드에 알리고, 노션에 내용을 업데이트한다.

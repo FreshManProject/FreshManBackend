@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 멤버 JPA Repository
  */
 public interface MemberRepository extends JpaRepository<Member, Long> {
+    Member findByOauth2Id(String oauth2Id);
 }
