@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.global.auth.util;
 
+import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,15 +22,33 @@ public class JwtUtil {
     }
 
     public String getOauth2Id(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("oauth2Id", String.class);
+        String oauth2Id;
+        try{
+            oauth2Id = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("oauth2Id", String.class);
+        }catch (Exception e){
+            throw new ValidationException("auth.invalid_refresh_token");
+        }
+        return oauth2Id;
     }
 
     public String getRole(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
+        String role;
+        try{
+             role = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
+        }catch (Exception e){
+            throw new ValidationException("auth.invalid_refresh_token");
+        }
+        return role;
     }
 
     public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        boolean before;
+        try{
+            before = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        }catch (Exception e){
+            throw new ValidationException("auth.invalid_refresh_token");
+        }
+        return before;
     }
 
     public String createJwt(String category,String username, String role, Long expiredMs) {
@@ -44,6 +63,12 @@ public class JwtUtil {
     }
 
     public String getCategory(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+        String category;
+        try{
+            category = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+        }catch (Exception e){
+            throw new ValidationException("auth.invalid_refresh_token");
+        }
+        return category;
     }
 }

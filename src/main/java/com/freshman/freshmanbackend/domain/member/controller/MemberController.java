@@ -23,28 +23,28 @@ public class MemberController {
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Validated MemberInfoUpdateRequest memberInfoUpdateRequest){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
-        memberService.saveMemberInfo(memberInfoUpdateRequest, oauth2Id);
+        memberService.save(memberInfoUpdateRequest, oauth2Id);
         return ResponseEntity.ok(new SuccessResponse());
     }
 
     @GetMapping
     public ResponseEntity<?> get(){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
-        MemberInfoResponse memberInfo = memberService.getMemberInfo(oauth2Id);
+        MemberInfoResponse memberInfo = memberService.get(oauth2Id);
         return ResponseEntity.ok(new DataResponse(memberInfo));
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<?> update(@RequestBody @Validated MemberInfoUpdateRequest memberInfoUpdateRequest){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
-        memberService.updateMemberInfo(oauth2Id, memberInfoUpdateRequest);
+        memberService.update(oauth2Id, memberInfoUpdateRequest);
         return ResponseEntity.ok(new SuccessResponse());
     }
 
-    @DeleteMapping()
+    @DeleteMapping
     public ResponseEntity<?> delete(){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
-        memberService.deleteMemberInfo(oauth2Id);
+        memberService.delete(oauth2Id);
         return ResponseEntity.ok(new SuccessResponse());
     }
 }

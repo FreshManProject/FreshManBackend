@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.global.auth.util;
 
+import com.freshman.freshmanbackend.global.auth.dto.CustomOauth2User;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,8 +13,8 @@ import java.security.Principal;
 @UtilityClass
 public class AuthMemberUtils {
     public String getCurrentUserOauth2Id(){
-        Principal principal =  (Principal) getAuthentication().getPrincipal();
-        return principal.getName();
+        CustomOauth2User oauth2User =  (CustomOauth2User) getAuthentication().getPrincipal();
+        return oauth2User.getName();
     }
 
     public Authentication getAuthentication() {

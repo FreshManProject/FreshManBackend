@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.global.auth.controller;
 
+import com.freshman.freshmanbackend.global.auth.service.JwtReissueService;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
 import com.freshman.freshmanbackend.global.common.utils.HttpUtils;
@@ -24,43 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class JwtReissueController {
     private final JwtUtil jwtUtil;
     private final RedisRefreshTokenService redisRefreshTokenService;
+    private final JwtReissueService jwtReissueService;
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
-        //쿠키에서 리프레시토큰 꺼내기
         String refreshToken = HttpUtils.getCookieValueByCookieKey(request, "refresh_token");
-        //토큰 존재 여부 확인
-        if (refreshToken == null) {
-            return new ResponseEntity<>("refresh token not exist", HttpStatus.BAD_REQUEST);
-        }
-
-        //만료되었나 확인
-        try{
-            jwtUtil.isExpired(refreshToken);
-        }catch(ExpiredJwtException e){
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
-        }
-
-        //토큰이 리프레시토큰인가?
-        String category = jwtUtil.getCategory(refreshToken);
-        if (!category.equals("refresh_token")) {
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
-        }
-
-        String oauth2Id = jwtUtil.getOauth2Id(refreshToken);
-        String role = jwtUtil.getRole(refreshToken);
-
-        //로그아웃 되지 않은 리프레시토큰인가?
-        if (!redisRefreshTokenService.ifRefreshTokenExists(oauth2Id,refreshToken)) return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
-
-        String newAccessToken = jwtUtil.createJwt("access_token", oauth2Id, role, 600000L);
-        String newRefreshToken = jwtUtil.createJwt("refresh_token", oauth2Id, role, 86400000L);
-
-        redisRefreshTokenService.removeRefreshToken(oauth2Id);
-        redisRefreshTokenService.saveRefreshToken(oauth2Id,newRefreshToken);
-
-        response.setHeader("access_token", newAccessToken);
-        response.addCookie(HttpUtils.createCookie("refresh_token", newRefreshToken));
+        JwtReissueService.Tokens tokens = jwtReissueService.reissueTokens(refreshToken);
+        response.setHeader("access_token", tokens.accessToken());
+        response.addCookie(HttpUtils.createCookie("refresh_token", tokens.refreshToken()));
         return ResponseEntity.ok(new SuccessResponse());
     }
 }

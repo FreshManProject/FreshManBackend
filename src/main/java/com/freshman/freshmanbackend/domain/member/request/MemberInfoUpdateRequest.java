@@ -14,7 +14,7 @@ public class MemberInfoUpdateRequest {
     @NotNull
     private String name;
     @NotNull
-    @Email()
+    @Email
     private String email;
     @NotNull
     private String address;
