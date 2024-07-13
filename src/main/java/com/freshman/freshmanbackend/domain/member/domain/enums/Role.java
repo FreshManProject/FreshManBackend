@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- *
+ * 유저와 어드민을 구분
  */
 @Getter
 @RequiredArgsConstructor
