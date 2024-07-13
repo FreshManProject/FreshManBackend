@@ -34,14 +34,14 @@ public class MemberController {
         return ResponseEntity.ok(new DataResponse(memberInfo));
     }
 
-    @PutMapping("/user")
+    @PutMapping()
     public ResponseEntity<?> updateMember(@RequestBody @Validated MemberInfoUpdateRequest memberInfoUpdateRequest){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
         memberService.updateMemberInfo(oauth2Id, memberInfoUpdateRequest);
         return ResponseEntity.ok(new SuccessResponse());
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping()
     public ResponseEntity<?> deleteMember(){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
         memberService.deleteMemberInfo(oauth2Id);
