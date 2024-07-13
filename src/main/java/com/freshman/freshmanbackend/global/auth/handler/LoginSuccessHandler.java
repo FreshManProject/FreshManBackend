@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.global.auth.handler;
 
 import com.freshman.freshmanbackend.global.auth.dto.CustomOauth2User;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
+import com.freshman.freshmanbackend.global.common.utils.HttpUtils;
 import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -44,17 +45,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         redisRefreshTokenService.saveRefreshToken(refreshToken,oauth2Id);
 
         response.setHeader("access_token", accessToken);
-        response.addCookie(createCookie("refresh_token", refreshToken));
+        response.addCookie(HttpUtils.createCookie("refresh_token", refreshToken));
         response.setStatus(HttpStatus.OK.value());
-    }
-
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-
-        return cookie;
     }
 }

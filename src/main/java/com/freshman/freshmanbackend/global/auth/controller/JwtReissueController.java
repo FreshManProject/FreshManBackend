@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.global.auth.controller;
 
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
+import com.freshman.freshmanbackend.global.common.utils.HttpUtils;
 import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
@@ -26,16 +27,8 @@ public class JwtReissueController {
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = null;
-
         //쿠키에서 리프레시토큰 꺼내기
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("refresh_token")) {
-                refreshToken = cookie.getValue();
-            }
-        }
-
+        String refreshToken = HttpUtils.getCookieValueByCookieKey(request, "refresh_token");
         //토큰 존재 여부 확인
         if (refreshToken == null) {
             return new ResponseEntity<>("refresh token not exist", HttpStatus.BAD_REQUEST);
@@ -67,15 +60,7 @@ public class JwtReissueController {
         redisRefreshTokenService.saveRefreshToken(oauth2Id,newRefreshToken);
 
         response.setHeader("access_token", newAccessToken);
-        response.addCookie(createCookie("refresh_token", newRefreshToken));
+        response.addCookie(HttpUtils.createCookie("refresh_token", newRefreshToken));
         return ResponseEntity.ok(new SuccessResponse());
-    }
-
-    private Cookie createCookie(String key, String value) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        cookie.setHttpOnly(true);
-
-        return cookie;
     }
 }
