@@ -15,6 +15,8 @@ import com.freshman.freshmanbackend.domain.product.service.command.ProductEntryS
 import com.freshman.freshmanbackend.domain.product.service.command.ProductModifyService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryListService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductListService;
+import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
+import com.freshman.freshmanbackend.global.common.response.DataResponse;
 import com.freshman.freshmanbackend.global.common.response.ListResponse;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
 
@@ -22,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +48,7 @@ public class ProductController {
   private final ProductModifyService productModifyService;
   private final ProductDeleteService productDeleteService;
   private final ProductListService productListService;
+  private final ProductOneService productOneService;
 
   private final ProductCategoryEntryService productCategoryEntryService;
   private final ProductCategoryModifyService productCategoryModifyService;
@@ -101,6 +105,16 @@ public class ProductController {
   @GetMapping("/categories")
   public ResponseEntity<?> doGetCategoryList() {
     return ResponseEntity.ok(new ListResponse(productCategoryListService.getList()));
+  }
+
+  /**
+   * 상품 상세 조회
+   *
+   * @return 요청 결과
+   */
+  @GetMapping("/{productSeq}")
+  public ResponseEntity<?> doGetDetail(@PathVariable Long productSeq) {
+    return ResponseEntity.ok(new DataResponse(productOneService.getOne(productSeq)));
   }
 
   /**

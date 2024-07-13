@@ -32,9 +32,9 @@ public class ProductListResponse {
    */
   private final String brand;
   /**
-   * 목록 이미지 url
+   * 목록 이미지
    */
-  private final String imageUrl;
+  private final String image;
 
   public ProductListResponse(Long productSeq, String name, Long price, Long salePrice, String brand) {
     this.productSeq = productSeq;
@@ -42,6 +42,6 @@ public class ProductListResponse {
     this.price = price;
     this.salePrice = salePrice;
     this.brand = brand;
-    this.imageUrl = "";
+    this.image = "";
   }
 }
