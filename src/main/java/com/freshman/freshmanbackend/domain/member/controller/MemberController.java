@@ -18,17 +18,18 @@ import java.security.Principal;
  */
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("/user")
+    @PostMapping
     public ResponseEntity<?> saveMemberInfo(@RequestBody @Validated MemberInfoUpdateRequest memberInfoUpdateRequest, Principal principal){
-        System.out.println("saving!");
+
         memberService.saveMemberInfo(memberInfoUpdateRequest, principal.getName());
         return ResponseEntity.ok(new SuccessResponse());
     }
 
-    @GetMapping("/user")
+    @GetMapping
     public ResponseEntity<?> getMemberInfo(Principal principal){
         MemberInfoResponse memberInfo = memberService.getMemberInfo(principal.getName());
         return ResponseEntity.ok(new DataResponse(memberInfo));
