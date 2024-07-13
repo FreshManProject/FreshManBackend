@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class MemberInfoUpdateRequest {
+public class MemberUpdateRequest {
     @NotNull
     private String name;
     @NotNull

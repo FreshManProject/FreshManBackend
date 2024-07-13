@@ -1,6 +1,7 @@
 package com.freshman.freshmanbackend.global.auth.service;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.freshman.freshmanbackend.global.auth.dto.Tokens;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
@@ -20,11 +21,9 @@ public class JwtReissueService {
     private final RedisRefreshTokenService redisRefreshTokenService;
 
     public Tokens reissueTokens(String refreshToken) {
-        String oauth2Id;
-        String role;
         checkRefreshTokenValidity(refreshToken);
-        oauth2Id = jwtUtil.getOauth2Id(refreshToken);
-        role = jwtUtil.getRole(refreshToken);
+        String oauth2Id = jwtUtil.getOauth2Id(refreshToken);
+        String role = jwtUtil.getRole(refreshToken);
         return getNewTokens(refreshToken, oauth2Id, role);
     }
 
@@ -62,8 +61,5 @@ public class JwtReissueService {
         if (!"refresh_token".equals(category)) {
             throw new ValidationException("auth.invalid_refresh_token");
         }
-    }
-
-    public record Tokens(String accessToken, String refreshToken) {
     }
 }

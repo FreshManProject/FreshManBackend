@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.global.auth.controller;
 
+import com.freshman.freshmanbackend.global.auth.dto.Tokens;
 import com.freshman.freshmanbackend.global.auth.service.JwtReissueService;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
@@ -30,7 +31,7 @@ public class JwtReissueController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = HttpUtils.getCookieValueByCookieKey(request, "refresh_token");
-        JwtReissueService.Tokens tokens = jwtReissueService.reissueTokens(refreshToken);
+        Tokens tokens = jwtReissueService.reissueTokens(refreshToken);
         response.setHeader("access_token", tokens.accessToken());
         response.addCookie(HttpUtils.createCookie("refresh_token", tokens.refreshToken()));
         return ResponseEntity.ok(new SuccessResponse());

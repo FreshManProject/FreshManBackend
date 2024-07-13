@@ -1,7 +1,7 @@
 package com.freshman.freshmanbackend.domain.member.domain;
 
 import com.freshman.freshmanbackend.domain.member.domain.enums.Role;
-import com.freshman.freshmanbackend.domain.member.request.MemberInfoUpdateRequest;
+import com.freshman.freshmanbackend.domain.member.request.MemberUpdateRequest;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class Member extends BaseTimeEntity {
     }
 
     //Oauth로 회원 가입 후 멤버 정보 등록
-    public Member registerMember(MemberInfoUpdateRequest registerRequest) {
+    public Member registerMember(MemberUpdateRequest registerRequest) {
         this.name = registerRequest.getName();
         this.email = registerRequest.getEmail();
         this.address = registerRequest.getAddress();
@@ -59,7 +59,7 @@ public class Member extends BaseTimeEntity {
     }
 
     //멤버 정보 수정
-    public Member updateMember(MemberInfoUpdateRequest updateRequest){
+    public Member updateMember(MemberUpdateRequest updateRequest){
         this.name = updateRequest.getName();
         this.email = updateRequest.getEmail();
         this.address = updateRequest.getAddress();

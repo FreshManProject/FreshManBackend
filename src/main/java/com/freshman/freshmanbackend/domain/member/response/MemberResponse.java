@@ -11,14 +11,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MemberInfoResponse {
+public class MemberResponse {
     private String name;
     private String email;
     private String address;
     private String phone;
 
-    public static MemberInfoResponse toResponse(Member member) {
-        return new MemberInfoResponse(
+    public static MemberResponse toResponse(Member member) {
+        return new MemberResponse(
                 member.getName(),
                 member.getEmail(),
                 member.getAddress(),

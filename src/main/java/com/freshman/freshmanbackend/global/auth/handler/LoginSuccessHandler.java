@@ -1,6 +1,7 @@
 package com.freshman.freshmanbackend.global.auth.handler;
 
 import com.freshman.freshmanbackend.global.auth.dto.CustomOauth2User;
+import com.freshman.freshmanbackend.global.auth.util.AuthMemberUtils;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.common.utils.HttpUtils;
 import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
@@ -30,17 +31,11 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        CustomOauth2User customUserDetails = (CustomOauth2User) authentication.getPrincipal();
-        String oauth2Id = customUserDetails.getName();
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String role = auth.getAuthority();
+        String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
+        String role = AuthMemberUtils.getCurrentUserRole();
 
         String accessToken = jwtUtil.createJwt("access_token",oauth2Id, role, 600000L);
         String refreshToken = jwtUtil.createJwt("refresh_token",oauth2Id, role, 864000000L);
-
         redisRefreshTokenService.removeRefreshToken(oauth2Id);
         redisRefreshTokenService.saveRefreshToken(refreshToken,oauth2Id);
 

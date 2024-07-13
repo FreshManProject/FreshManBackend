@@ -1,7 +1,7 @@
 package com.freshman.freshmanbackend.domain.member.controller;
 
-import com.freshman.freshmanbackend.domain.member.request.MemberInfoUpdateRequest;
-import com.freshman.freshmanbackend.domain.member.response.MemberInfoResponse;
+import com.freshman.freshmanbackend.domain.member.request.MemberUpdateRequest;
+import com.freshman.freshmanbackend.domain.member.response.MemberResponse;
 import com.freshman.freshmanbackend.domain.member.service.MemberService;
 import com.freshman.freshmanbackend.global.auth.util.AuthMemberUtils;
 import com.freshman.freshmanbackend.global.common.response.DataResponse;
@@ -21,23 +21,23 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody @Validated MemberInfoUpdateRequest memberInfoUpdateRequest){
+    public ResponseEntity<?> save(@RequestBody @Validated MemberUpdateRequest memberUpdateRequest){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
-        memberService.save(memberInfoUpdateRequest, oauth2Id);
+        memberService.save(memberUpdateRequest, oauth2Id);
         return ResponseEntity.ok(new SuccessResponse());
     }
 
     @GetMapping
     public ResponseEntity<?> get(){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
-        MemberInfoResponse memberInfo = memberService.get(oauth2Id);
+        MemberResponse memberInfo = memberService.get(oauth2Id);
         return ResponseEntity.ok(new DataResponse(memberInfo));
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody @Validated MemberInfoUpdateRequest memberInfoUpdateRequest){
+    public ResponseEntity<?> update(@RequestBody @Validated MemberUpdateRequest memberUpdateRequest){
         String oauth2Id = AuthMemberUtils.getCurrentUserOauth2Id();
-        memberService.update(oauth2Id, memberInfoUpdateRequest);
+        memberService.update(oauth2Id, memberUpdateRequest);
         return ResponseEntity.ok(new SuccessResponse());
     }
 
