@@ -23,6 +23,7 @@ public class MemberController {
 
     @PostMapping("/user")
     public ResponseEntity<?> saveMemberInfo(@RequestBody @Validated MemberInfoUpdateRequest memberInfoUpdateRequest, Principal principal){
+        System.out.println("saving!");
         memberService.saveMemberInfo(memberInfoUpdateRequest, principal.getName());
         return ResponseEntity.ok(new SuccessResponse());
     }

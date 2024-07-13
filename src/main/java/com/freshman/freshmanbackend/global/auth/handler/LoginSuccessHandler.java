@@ -2,11 +2,13 @@ package com.freshman.freshmanbackend.global.auth.handler;
 
 import com.freshman.freshmanbackend.global.auth.dto.CustomOauth2User;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
+import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,6 +25,7 @@ import java.util.Iterator;
 @Component
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
+    private final RedisRefreshTokenService redisRefreshTokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -34,18 +37,22 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(oauth2Id, role, 3600*60*60*60L);
+        String accessToken = jwtUtil.createJwt("access_token",oauth2Id, role, 600000L);
+        String refreshToken = jwtUtil.createJwt("refresh_token",oauth2Id, role, 864000000L);
 
-        response.addCookie(createCookie("Authorization", token));
-        response.sendRedirect("http://localhost:3000/");
+        redisRefreshTokenService.removeRefreshToken(oauth2Id);
+        redisRefreshTokenService.saveRefreshToken(refreshToken,oauth2Id);
+
+        response.setHeader("access_token", accessToken);
+        response.addCookie(createCookie("refresh_token", refreshToken));
+        response.setStatus(HttpStatus.OK.value());
     }
 
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(60*60*60);
+        cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);
-        cookie.setPath("/");
         cookie.setHttpOnly(true);
 
         return cookie;

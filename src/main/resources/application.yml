@@ -23,3 +23,7 @@ spring:
 
   config:
     import: application-secret.yml
+  data:
+    redis:
+      host: localhost
+      port: 6379

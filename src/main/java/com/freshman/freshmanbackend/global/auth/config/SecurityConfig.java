@@ -1,9 +1,11 @@
 package com.freshman.freshmanbackend.global.auth.config;
 
 import com.freshman.freshmanbackend.global.auth.filter.JwtFilter;
+import com.freshman.freshmanbackend.global.auth.filter.JwtLogoutFilter;
 import com.freshman.freshmanbackend.global.auth.handler.LoginSuccessHandler;
 import com.freshman.freshmanbackend.global.auth.service.CustomOAuth2UserService;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
+import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -29,6 +32,7 @@ import java.util.Collections;
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final LoginSuccessHandler loginSuccessHandler;
+    private final RedisRefreshTokenService redisRefreshTokenService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil) throws Exception {
@@ -59,8 +63,9 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService))
                         .successHandler(loginSuccessHandler))
                 .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtLogoutFilter(jwtUtil,redisRefreshTokenService), LogoutFilter.class)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/reissue").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
