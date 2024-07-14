@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -61,8 +60,8 @@ public class ProductController {
    * @param productSeq 상품 일련번호
    * @return 요청 결과
    */
-  @DeleteMapping
-  public ResponseEntity<?> doDelete(@RequestParam(required = false) Long productSeq) {
+  @DeleteMapping("/{productSeq}")
+  public ResponseEntity<?> doDelete(@PathVariable(required = false) Long productSeq) {
     ProductValidator.validateProductSeq(productSeq);
 
     productDeleteService.delete(productSeq);
@@ -75,8 +74,8 @@ public class ProductController {
    * @param categorySeq 카테고리 일련번호
    * @return 요청 결과
    */
-  @DeleteMapping("/categories")
-  public ResponseEntity<?> doDeleteCategory(@RequestParam(required = false) Long categorySeq) {
+  @DeleteMapping("/categories/{categorySeq}")
+  public ResponseEntity<?> doDeleteCategory(@PathVariable(required = false) Long categorySeq) {
     ProductValidator.validateCategorySeq(categorySeq);
 
     productCategoryDeleteService.delete(categorySeq);
@@ -89,8 +88,8 @@ public class ProductController {
    * @param productSeq 상품 일련번호
    * @return 요청 결과
    */
-  @DeleteMapping("/sales")
-  public ResponseEntity<?> doDeleteSale(@RequestParam(required = false) Long productSeq) {
+  @DeleteMapping("/sales/{productSeq}")
+  public ResponseEntity<?> doDeleteSale(@PathVariable(required = false) Long productSeq) {
     ProductValidator.validateProductSeq(productSeq);
 
     productDeleteService.deleteSale(productSeq);
