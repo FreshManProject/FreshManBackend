@@ -20,3 +20,10 @@ spring:
     encoding: UTF-8
     fallbackToSystemLocale: false
     alwaysUseMessageFormat: true
+
+  config:
+    import: application-secret.yml
+  data:
+    redis:
+      host: localhost
+      port: 6379
