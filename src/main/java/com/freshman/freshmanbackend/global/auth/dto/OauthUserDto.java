@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OauthUserDto {
+    private Long memberSeq;
     private String oauth2Id;
     private String role;
 }

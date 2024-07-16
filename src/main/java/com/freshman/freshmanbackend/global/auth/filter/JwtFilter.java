@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.global.auth.filter;
 
+import com.freshman.freshmanbackend.domain.member.repository.MemberRepository;
 import com.freshman.freshmanbackend.global.auth.dto.CustomOauth2User;
 import com.freshman.freshmanbackend.global.auth.dto.OauthUserDto;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
@@ -25,6 +26,7 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
+    private final MemberRepository memberRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -61,10 +63,10 @@ public class JwtFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRole(accessToken);
 
         //userDTO를 생성하여 값 set
-        OauthUserDto userDTO = new OauthUserDto(oauth2Id,role);
+        OauthUserDto userDTO = new OauthUserDto(null,oauth2Id,role);
 
         //UserDetails에 회원 정보 객체 담기
-        CustomOauth2User customOAuth2User = new CustomOauth2User(userDTO);
+        CustomOauth2User customOAuth2User = new CustomOauth2User(userDTO,memberRepository);
 
         //스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
