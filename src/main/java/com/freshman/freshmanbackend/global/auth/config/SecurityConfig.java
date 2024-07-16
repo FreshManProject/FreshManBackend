@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.global.auth.config;
 
+import com.freshman.freshmanbackend.domain.member.repository.MemberRepository;
 import com.freshman.freshmanbackend.global.auth.filter.JwtFilter;
 import com.freshman.freshmanbackend.global.auth.filter.JwtLogoutFilter;
 import com.freshman.freshmanbackend.global.auth.handler.LoginSuccessHandler;
@@ -35,7 +36,7 @@ public class SecurityConfig {
     private final RedisRefreshTokenService redisRefreshTokenService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil, MemberRepository memberRepository) throws Exception {
         http.
                 csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -62,7 +63,7 @@ public class SecurityConfig {
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
                         .successHandler(loginSuccessHandler))
-                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(jwtUtil,memberRepository), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtLogoutFilter(jwtUtil,redisRefreshTokenService), LogoutFilter.class)
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/reissue").permitAll()
