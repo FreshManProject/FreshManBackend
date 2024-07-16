@@ -41,13 +41,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Member member = memberRepository.findByOauth2Id(oauth2Id);
         if (member == null) { // 회원가입
             Member newMember = new Member(oauth2Id, Role.USER);
-            memberRepository.save(newMember);
-            OauthUserDto userDto = new OauthUserDto(oauth2Id, Role.USER.getDesc());
-            return new CustomOauth2User(userDto);
+            Member savedMember = memberRepository.save(newMember);
+            OauthUserDto userDto = new OauthUserDto(savedMember.getMemberSeq(),oauth2Id,Role.USER.getDesc());
+            return new CustomOauth2User(userDto,memberRepository);
         }
         else{ // 로그인
-            OauthUserDto userDto = new OauthUserDto(oauth2Id, member.getRole().getDesc());
-            return new CustomOauth2User(userDto);
+            OauthUserDto userDto = new OauthUserDto(member.getMemberSeq(),oauth2Id, member.getRole().getDesc());
+            return new CustomOauth2User(userDto,memberRepository);
         }
     }
 }

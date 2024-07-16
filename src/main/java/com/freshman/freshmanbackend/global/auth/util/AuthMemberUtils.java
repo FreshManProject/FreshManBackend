@@ -30,4 +30,9 @@ public class AuthMemberUtils {
         GrantedAuthority auth = iterator.next();
         return auth.getAuthority();
     }
+
+    public Long getCurrentMemberSeq(){
+        CustomOauth2User oauth2User =  (CustomOauth2User) getAuthentication().getPrincipal();
+        return oauth2User.getMemberSeq();
+    }
 }
