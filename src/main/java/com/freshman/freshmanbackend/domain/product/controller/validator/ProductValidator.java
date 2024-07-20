@@ -7,6 +7,7 @@ import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
 
@@ -79,6 +80,24 @@ public class ProductValidator {
   public void validate(ProductCategoryEntryRequest param) {
     // 카테고리명
     validateEmpty(param.getName(), "product.category.param_name_empty");
+  }
+
+  /**
+   * 후기 등록 요청 유효성 체크
+   *
+   * @param param 요청 파라미터
+   */
+  public void validate(ReviewEntryRequest param) {
+    // 후기 내용
+    validateEmpty(param.getContent(), "review.param_content_empty");
+    // 별점
+    Byte score = param.getScore();
+    validateNull(score, "review.param_score_null");
+    if (score < 1 || score > 5) {
+      throw new ValidationException("review.param_score_invalid");
+    }
+    // 상품 일련번호
+    validateProductSeq(param.getProductSeq());
   }
 
   /**

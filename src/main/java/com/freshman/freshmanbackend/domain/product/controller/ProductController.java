@@ -7,12 +7,14 @@ import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryModifyService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductModifyService;
+import com.freshman.freshmanbackend.domain.product.service.command.ReviewEntryService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryListService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductListService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
@@ -53,6 +55,8 @@ public class ProductController {
   private final ProductCategoryModifyService productCategoryModifyService;
   private final ProductCategoryDeleteService productCategoryDeleteService;
   private final ProductCategoryListService productCategoryListService;
+
+  private final ReviewEntryService reviewEntryService;
 
   /**
    * 상품 삭제
@@ -154,6 +158,20 @@ public class ProductController {
     ProductValidator.validate(param);
 
     productCategoryEntryService.entry(param);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
+   * 후기 등록
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @PostMapping("reviews")
+  public ResponseEntity<?> doPostReview(@RequestBody ReviewEntryRequest param) {
+    ProductValidator.validate(param);
+
+    reviewEntryService.entry(param);
     return ResponseEntity.ok(new SuccessResponse());
   }
 
