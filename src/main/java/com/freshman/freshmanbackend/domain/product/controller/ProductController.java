@@ -7,6 +7,7 @@ import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
+import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryEntryService;
@@ -128,6 +129,19 @@ public class ProductController {
    */
   @GetMapping
   public ResponseEntity<?> doGetList(@ModelAttribute ProductListRequest param) {
+    ProductValidator.validate(param);
+
+    return ResponseEntity.ok(new ListResponse(productListService.getList(param)));
+  }
+
+  /**
+   * 상품 검색 조회
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @GetMapping("/search")
+  public ResponseEntity<?> doGetSearch(@ModelAttribute ProductSearchRequest param) {
     ProductValidator.validate(param);
 
     return ResponseEntity.ok(new ListResponse(productListService.getList(param)));

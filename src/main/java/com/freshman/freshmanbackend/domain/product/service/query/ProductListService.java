@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.domain.product.service.query;
 
 import com.freshman.freshmanbackend.domain.product.dao.ProductListDao;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
+import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
 
 import org.springframework.stereotype.Service;
@@ -30,6 +31,17 @@ public class ProductListService {
    */
   @Transactional(readOnly = true)
   public List<ProductListResponse> getList(ProductListRequest param) {
+    return productListDao.select(param);
+  }
+
+  /**
+   * 상품 검색 조회
+   *
+   * @param param 요청 파라미터
+   * @return 상품 목록
+   */
+  @Transactional(readOnly = true)
+  public List<ProductListResponse> getList(ProductSearchRequest param) {
     return productListDao.select(param);
   }
 }
