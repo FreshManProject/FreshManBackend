@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.product.dao.ProductListDao;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
+import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class ProductListService {
 
   private final ProductListDao productListDao;
+
+  private final SearchLogService searchLogService;
 
   /**
    * 상품 목록 조회
@@ -42,6 +45,8 @@ public class ProductListService {
    */
   @Transactional(readOnly = true)
   public List<ProductListResponse> getList(ProductSearchRequest param) {
+    // 최근 검색어 등록
+    searchLogService.entry(param.getKeyword());
     return productListDao.select(param);
   }
 }

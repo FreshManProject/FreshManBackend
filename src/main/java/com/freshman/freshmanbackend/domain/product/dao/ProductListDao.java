@@ -131,11 +131,11 @@ public class ProductListDao {
     QProduct product = QProduct.product;
 
     if (StringUtils.isBlank(sort)) {
-      return product.createAt.desc();
+      return product.createdAt.desc();
     }
 
     if (StringUtils.equals(sort, ProductSortType.NEWEST.getCode())) {
-      return product.createAt.desc();
+      return product.createdAt.desc();
     } else if (StringUtils.equals(sort, ProductSortType.HIGHEST.getCode())) {
       return product.price.desc();
     } else {
