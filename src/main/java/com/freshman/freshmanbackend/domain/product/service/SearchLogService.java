@@ -29,23 +29,18 @@ public class SearchLogService {
   /**
    * 최근 검색어 삭제
    *
-   * @param keyword 검색 키워드
+   * @param index 키워드 인덱스
    */
-  public void delete(String keyword) {
+  public void delete(Long index) {
     String key = "SearchLog" + AuthMemberUtils.getMemberSeq();
 
-    if (StringUtils.isBlank(keyword)) {
+    if (Objects.isNull(index)) {
       // 최근 검색어 전체 삭제
       redisTemplate.delete(key);
     } else {
       // 최근 검색어 삭제
-      List<SearchLog> list = redisTemplate.opsForList().range(key, 0, -1);
-      if (Objects.nonNull(list) && !list.isEmpty()) {
-        SearchLog searchLog = list.stream()
-                                  .filter(log -> StringUtils.equals(keyword, log.getKeyword()))
-                                  .findFirst()
-                                  .orElseThrow(() -> new ValidationException("search.keyword.not_found"));
-
+      SearchLog searchLog = redisTemplate.opsForList().index(key, index);
+      if (Objects.nonNull(searchLog)) {
         redisTemplate.opsForList().remove(key, 1, searchLog);
       } else {
         throw new ValidationException("search.keyword.not_found");
