@@ -38,7 +38,7 @@ public class CartService {
   public void add(CartEntryRequest cartEntryRequest) {
     Long productSeq = cartEntryRequest.getProductSeq();
     Integer quantity = cartEntryRequest.getQuantity();
-    Long currentMemberSeq = AuthMemberUtils.getCurrentMemberSeq();
+    Long currentMemberSeq = AuthMemberUtils.getMemberSeq();
     Cart cartByMemberIdAndProductId = cartDao.getCartByMemberIdAndProductId(currentMemberSeq, productSeq);
     if (cartByMemberIdAndProductId == null) {
       Product product =
@@ -55,7 +55,7 @@ public class CartService {
   @Transactional
   public void delete(Long cartId) {
     Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new RuntimeException("Cart not found"));
-    if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getCurrentUserOauth2Id())) {
+    if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getUserOauth2Id())) {
       throw new RuntimeException("Current member is not authorized to delete cart.");
     }
     cartRepository.deleteById(cartId);
@@ -63,7 +63,7 @@ public class CartService {
 
   @Transactional(readOnly = true)
   public List<CartInfoResponse> getUserCartsList() {
-    Long currentMemberSeq = AuthMemberUtils.getCurrentMemberSeq();
+    Long currentMemberSeq = AuthMemberUtils.getMemberSeq();
     List<Cart> carts = cartListDao.getByMemberSeq(currentMemberSeq);
     return carts.stream().map(CartInfoResponse::fromCart).collect(Collectors.toList());
   }
@@ -71,7 +71,7 @@ public class CartService {
   @Transactional
   public void update(CartUpdateRequest cartUpdateRequest, Long cartSeq) {
     Cart cart = cartRepository.findById(cartSeq).orElseThrow(() -> new RuntimeException("Cart not found"));
-    if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getCurrentUserOauth2Id())) {
+    if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getUserOauth2Id())) {
       throw new ValidationException();
     }
     cart.updateCartQuantity(cartUpdateRequest.getQuantity());
