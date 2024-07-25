@@ -25,7 +25,7 @@ public class BaseTimeEntity {
    */
   @CreatedDate
   @Column(name = "CRE_DTM", updatable = false, nullable = false)
-  protected LocalDateTime createAt;
+  protected LocalDateTime createdAt;
   /**
    * 수정일시
    */

@@ -7,7 +7,9 @@ import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
+import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
+import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryModifyService;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -57,6 +60,8 @@ public class ProductController {
   private final ProductCategoryListService productCategoryListService;
 
   private final ReviewEntryService reviewEntryService;
+
+  private final SearchLogService searchLogService;
 
   /**
    * 상품 삭제
@@ -101,6 +106,18 @@ public class ProductController {
   }
 
   /**
+   * 상품 최근 검색어 삭제
+   *
+   * @return 요청 결과
+   */
+  @DeleteMapping("/search/keywords")
+  public ResponseEntity<?> doDeleteSearchKeyword(@RequestParam(required = false) String keyword) {
+    searchLogService.delete(keyword);
+
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
    * 상품 카테고리 목록 조회
    *
    * @return 요청 결과
@@ -131,6 +148,29 @@ public class ProductController {
     ProductValidator.validate(param);
 
     return ResponseEntity.ok(new ListResponse(productListService.getList(param)));
+  }
+
+  /**
+   * 상품 검색 조회
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @GetMapping("/search")
+  public ResponseEntity<?> doGetSearch(@ModelAttribute ProductSearchRequest param) {
+    ProductValidator.validate(param);
+
+    return ResponseEntity.ok(new ListResponse(productListService.getList(param)));
+  }
+
+  /**
+   * 상품 최근 검색어 조회
+   *
+   * @return 요청 결과
+   */
+  @GetMapping("/search/keywords")
+  public ResponseEntity<?> doGetSearchKeywordList() {
+    return ResponseEntity.ok(new ListResponse(searchLogService.getList()));
   }
 
   /**

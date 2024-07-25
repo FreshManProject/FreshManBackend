@@ -65,10 +65,11 @@ public class SecurityConfig {
                                        .successHandler(loginSuccessHandler))
         .addFilterBefore(new JwtFilter(jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new JwtLogoutFilter(jwtUtil, redisRefreshTokenService), LogoutFilter.class)
-        .authorizeHttpRequests((auth) -> auth.requestMatchers("/reissue", "/products", "/products/categories")
-                                             .permitAll()
-                                             .anyRequest()
-                                             .authenticated())
+        .authorizeHttpRequests(
+            (auth) -> auth.requestMatchers("/reissue", "/products", "/products/search", "/products/categories")
+                          .permitAll()
+                          .anyRequest()
+                          .authenticated())
         .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     return http.build();
   }
