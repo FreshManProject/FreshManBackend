@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 
@@ -86,11 +85,11 @@ public class ProductListDao {
     booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));
 
     // 낮은 가격
-    if (Objects.nonNull(param.getLowPrice())) {
+    if (param.getLowPrice() != null) {
       booleanBuilder.and(product.price.goe(param.getLowPrice()));
     }
     // 높은 가격
-    if (Objects.nonNull(param.getHighPrice())) {
+    if (param.getHighPrice() != null) {
       booleanBuilder.and(product.price.loe(param.getHighPrice()));
     }
 
@@ -107,7 +106,7 @@ public class ProductListDao {
     // 유효여부
     booleanBuilder.and(product.valid.eq(Valid.TRUE));
     // 카테고리
-    if (Objects.nonNull(param.getCategorySeq())) {
+    if (param.getCategorySeq() != null) {
       booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));
     }
 
@@ -116,11 +115,11 @@ public class ProductListDao {
       booleanBuilder.and(product.name.like("%" + param.getKeyword() + "%"));
     }
     // 낮은 가격
-    if (Objects.nonNull(param.getLowPrice())) {
+    if (param.getLowPrice() != null) {
       booleanBuilder.and(product.price.goe(param.getLowPrice()));
     }
     // 높은 가격
-    if (Objects.nonNull(param.getHighPrice())) {
+    if (param.getHighPrice() != null) {
       booleanBuilder.and(product.price.loe(param.getHighPrice()));
     }
 

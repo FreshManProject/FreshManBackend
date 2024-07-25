@@ -3,7 +3,6 @@ package com.freshman.freshmanbackend.global.common.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Collection;
-import java.util.Objects;
 
 import lombok.Getter;
 
@@ -21,6 +20,6 @@ public class ListResponse extends SuccessResponse {
 
   public ListResponse(Collection<?> list) {
     this.list = list;
-    this.count = Objects.isNull(list) ? 0 : list.size();
+    this.count = list == null ? 0 : list.size();
   }
 }

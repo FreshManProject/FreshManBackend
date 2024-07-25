@@ -38,9 +38,9 @@ public class DateTimeUtils {
   /**
    * yyyy-MM-dd HH:mm:ss 문자열 -> LocalDateTime
    */
-  public LocalDateTime convertToDateTime(String dateString) {
+  public LocalDateTime convertToDateTime(String dateTimeString) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DEFAULT_DATETIME, Locale.KOREA);
-    return LocalDateTime.parse(dateString, formatter);
+    return LocalDateTime.parse(dateTimeString, formatter);
   }
 
   /**
