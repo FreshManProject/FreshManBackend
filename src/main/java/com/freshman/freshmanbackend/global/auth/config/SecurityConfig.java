@@ -46,7 +46,7 @@ public class SecurityConfig {
 
             CorsConfiguration configuration = new CorsConfiguration();
 
-            configuration.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
+            configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
             configuration.setAllowedMethods(Collections.singletonList("*"));
             configuration.setAllowCredentials(true);
             configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -65,7 +65,11 @@ public class SecurityConfig {
                                        .successHandler(loginSuccessHandler))
         .addFilterBefore(new JwtFilter(jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new JwtLogoutFilter(jwtUtil, redisRefreshTokenService), LogoutFilter.class)
-        .authorizeHttpRequests((auth) -> auth.requestMatchers("/reissue").permitAll().anyRequest().authenticated())
+        .authorizeHttpRequests(
+            (auth) -> auth.requestMatchers("/reissue", "/products", "/products/search", "/products/categories")
+                          .permitAll()
+                          .anyRequest()
+                          .authenticated())
         .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     return http.build();
   }

@@ -7,6 +7,8 @@ import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
+import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
 
@@ -82,6 +84,24 @@ public class ProductValidator {
   }
 
   /**
+   * 후기 등록 요청 유효성 체크
+   *
+   * @param param 요청 파라미터
+   */
+  public void validate(ReviewEntryRequest param) {
+    // 후기 내용
+    validateEmpty(param.getContent(), "review.param_content_empty");
+    // 별점
+    Byte score = param.getScore();
+    validateNull(score, "review.param_score_null");
+    if (score < 1 || score > 5) {
+      throw new ValidationException("review.param_score_invalid");
+    }
+    // 상품 일련번호
+    validateProductSeq(param.getProductSeq());
+  }
+
+  /**
    * 상품 카테고리 수정 요청 유효성 체크
    *
    * @param param 요청 파라미터
@@ -101,6 +121,24 @@ public class ProductValidator {
   public void validate(ProductListRequest param) {
     // 카테고리 일련번호
     validateNull(param.getCategorySeq(), "product.param_category_null");
+    // 낮은 가격 > 높은 가격 체크
+    if (Objects.nonNull(param.getLowPrice()) && Objects.nonNull(param.getHighPrice())) {
+      if (param.getLowPrice() > param.getHighPrice()) {
+        throw new ValidationException("product.param_price_search_rule");
+      }
+    }
+    // 정렬 타입
+    if (StringUtils.isNotBlank(param.getSort()) && !ProductSortType.containCode(param.getSort())) {
+      throw new ValidationException("product.param_sort_invalid");
+    }
+  }
+
+  /**
+   * 상품 검색 조회 요청 유효성 체크
+   *
+   * @param param 요청 파라미터
+   */
+  public void validate(ProductSearchRequest param) {
     // 낮은 가격 > 높은 가격 체크
     if (Objects.nonNull(param.getLowPrice()) && Objects.nonNull(param.getHighPrice())) {
       if (param.getLowPrice() > param.getHighPrice()) {

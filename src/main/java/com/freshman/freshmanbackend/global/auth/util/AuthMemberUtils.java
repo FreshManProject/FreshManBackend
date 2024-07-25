@@ -20,17 +20,17 @@ public class AuthMemberUtils {
     return SecurityContextHolder.getContext().getAuthentication();
   }
 
-  public Long getCurrentMemberSeq() {
+  public Long getMemberSeq() {
     CustomOauth2User oauth2User = (CustomOauth2User) getAuthentication().getPrincipal();
     return oauth2User.getMemberSeq();
   }
 
-  public String getCurrentUserOauth2Id() {
+  public String getUserOauth2Id() {
     CustomOauth2User oauth2User = (CustomOauth2User) getAuthentication().getPrincipal();
     return oauth2User.getName();
   }
 
-  public String getCurrentUserRole() {
+  public String getUserRole() {
     Collection<? extends GrantedAuthority> authorities = getAuthentication().getAuthorities();
     Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
     GrantedAuthority auth = iterator.next();
