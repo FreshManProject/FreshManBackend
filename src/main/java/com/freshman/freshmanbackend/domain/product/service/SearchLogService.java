@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,28 +23,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SearchLogService {
 
+  public static final String SEARCH_LOG_PREFIX = "SearchLog";
+
   private final RedisTemplate<String, SearchLog> redisTemplate;
 
   /**
    * 최근 검색어 삭제
    *
-   * @param keyword 검색 키워드
+   * @param index 키워드 인덱스
    */
-  public void delete(String keyword) {
-    String key = "SearchLog" + AuthMemberUtils.getMemberSeq();
+  public void delete(Long index) {
+    String key = SEARCH_LOG_PREFIX + AuthMemberUtils.getMemberSeq();
 
-    if (StringUtils.isBlank(keyword)) {
+    if (index == null) {
       // 최근 검색어 전체 삭제
       redisTemplate.delete(key);
     } else {
       // 최근 검색어 삭제
-      List<SearchLog> list = redisTemplate.opsForList().range(key, 0, -1);
-      if (Objects.nonNull(list) && !list.isEmpty()) {
-        SearchLog searchLog = list.stream()
-                                  .filter(log -> StringUtils.equals(keyword, log.getKeyword()))
-                                  .findFirst()
-                                  .orElseThrow(() -> new ValidationException("search.keyword.not_found"));
-
+      SearchLog searchLog = redisTemplate.opsForList().index(key, index);
+      if (searchLog != null) {
         redisTemplate.opsForList().remove(key, 1, searchLog);
       } else {
         throw new ValidationException("search.keyword.not_found");
@@ -65,7 +61,7 @@ public class SearchLogService {
       return;
     }
 
-    String key = "SearchLog" + AuthMemberUtils.getMemberSeq();
+    String key = SEARCH_LOG_PREFIX + AuthMemberUtils.getMemberSeq();
 
     // Redis 리스트에서 중복 데이터 조회
     SearchLog searchLog = redisTemplate.opsForList()
@@ -76,7 +72,7 @@ public class SearchLogService {
                                        .findFirst()
                                        .orElse(null);
 
-    if (Objects.nonNull(searchLog)) {
+    if (searchLog != null) {
       // 중복된 데이터를 맨 앞으로 이동시키기
       redisTemplate.opsForList().remove(key, 1, searchLog);
       redisTemplate.opsForList().leftPush(key, new SearchLog(keyword));
@@ -98,7 +94,7 @@ public class SearchLogService {
    * @return 최근 검색어 목록
    */
   public List<String> getList() {
-    String key = "SearchLog" + AuthMemberUtils.getMemberSeq();
+    String key = SEARCH_LOG_PREFIX + AuthMemberUtils.getMemberSeq();
     return redisTemplate.opsForList().range(key, 0, 10).stream().map(SearchLog::getKeyword).toList();
   }
 }

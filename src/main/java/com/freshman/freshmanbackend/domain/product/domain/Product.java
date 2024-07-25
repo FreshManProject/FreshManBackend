@@ -5,9 +5,20 @@ import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -67,7 +78,8 @@ public class Product extends BaseTimeEntity {
   /**
    * 상품 할인정보
    */
-  @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private ProductSale sale;
 
   public Product(String name, Long price, String description, String brand, ProductCategory category) {
@@ -79,27 +91,12 @@ public class Product extends BaseTimeEntity {
   }
 
   /**
-   * 상품 할인정보 등록
-   */
-  public void addSale(ProductSale sale) {
-    this.sale = sale;
-    sale.setProduct(this);
-  }
-
-  /**
-   * 상품 할인정보 삭제
-   */
-  public void deleteSale() {
-    this.sale = null;
-  }
-
-  /**
    * 상품 이미지 목록 추가
    *
    * @param addImageList 이미지 목록
    */
   public void addImageList(List<ProductImage> addImageList) {
-    if (Objects.isNull(addImageList) || addImageList.isEmpty()) {
+    if (addImageList == null || addImageList.isEmpty()) {
       return;
     }
 
@@ -110,10 +107,25 @@ public class Product extends BaseTimeEntity {
   }
 
   /**
+   * 상품 할인정보 등록
+   */
+  public void addSale(ProductSale sale) {
+    this.sale = sale;
+    sale.setProduct(this);
+  }
+
+  /**
    * 상품 삭제
    */
   public void delete() {
     this.valid = Valid.FALSE;
+  }
+
+  /**
+   * 상품 할인정보 삭제
+   */
+  public void deleteSale() {
+    this.sale = null;
   }
 
   /**

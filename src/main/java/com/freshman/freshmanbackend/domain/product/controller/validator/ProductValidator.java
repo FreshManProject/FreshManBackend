@@ -14,8 +14,6 @@ import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Objects;
-
 import lombok.experimental.UtilityClass;
 
 /**
@@ -122,7 +120,7 @@ public class ProductValidator {
     // 카테고리 일련번호
     validateNull(param.getCategorySeq(), "product.param_category_null");
     // 낮은 가격 > 높은 가격 체크
-    if (Objects.nonNull(param.getLowPrice()) && Objects.nonNull(param.getHighPrice())) {
+    if (param.getLowPrice() != null && param.getHighPrice() != null) {
       if (param.getLowPrice() > param.getHighPrice()) {
         throw new ValidationException("product.param_price_search_rule");
       }
@@ -140,7 +138,7 @@ public class ProductValidator {
    */
   public void validate(ProductSearchRequest param) {
     // 낮은 가격 > 높은 가격 체크
-    if (Objects.nonNull(param.getLowPrice()) && Objects.nonNull(param.getHighPrice())) {
+    if (param.getLowPrice() != null && param.getHighPrice() != null) {
       if (param.getLowPrice() > param.getHighPrice()) {
         throw new ValidationException("product.param_price_search_rule");
       }
@@ -184,7 +182,7 @@ public class ProductValidator {
   }
 
   private void validateNull(Object obj, String exception) {
-    if (Objects.isNull(obj)) {
+    if (obj == null) {
       throw new ValidationException(exception);
     }
   }

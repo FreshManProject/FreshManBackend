@@ -9,8 +9,6 @@ import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -59,7 +57,7 @@ public class ProductDeleteService {
    * 할인정보 존재여부 검증
    */
   private void verifySaleNotExists(ProductSale sale) {
-    if (Objects.isNull(sale)) {
+    if (sale == null) {
       throw new ValidationException("product.sale.not_exists");
     }
   }

@@ -111,8 +111,8 @@ public class ProductController {
    * @return 요청 결과
    */
   @DeleteMapping("/search/keywords")
-  public ResponseEntity<?> doDeleteSearchKeyword(@RequestParam(required = false) String keyword) {
-    searchLogService.delete(keyword);
+  public ResponseEntity<?> doDeleteSearchKeyword(@RequestParam(required = false) Long index) {
+    searchLogService.delete(index);
 
     return ResponseEntity.ok(new SuccessResponse());
   }

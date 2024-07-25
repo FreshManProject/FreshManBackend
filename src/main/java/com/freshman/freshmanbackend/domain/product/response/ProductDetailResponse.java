@@ -8,7 +8,6 @@ import com.freshman.freshmanbackend.domain.product.domain.enums.ProductImageType
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 import lombok.Getter;
 
@@ -53,7 +52,7 @@ public class ProductDetailResponse {
     this.name = product.getName();
     this.price = product.getPrice();
     this.description = product.getDescription();
-    if (Objects.nonNull(product.getSale())) {
+    if (product.getSale() != null) {
       LocalDateTime startAt = product.getSale().getSaleStartAt();
       LocalDateTime endAt = product.getSale().getSaleEndAt();
       LocalDateTime curTime = LocalDateTime.now();

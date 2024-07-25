@@ -1,5 +1,7 @@
 package com.freshman.freshmanbackend.domain.product.domain;
 
+import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
+
 import java.time.LocalDateTime;
 
 import lombok.Getter;
@@ -25,6 +27,6 @@ public class SearchLog {
 
   public SearchLog(String keyword) {
     this.keyword = keyword;
-    this.createdAt = LocalDateTime.now().toString();
+    this.createdAt = DateTimeUtils.convertToString(LocalDateTime.now(), DateTimeUtils.DEFAULT_DATETIME);
   }
 }
