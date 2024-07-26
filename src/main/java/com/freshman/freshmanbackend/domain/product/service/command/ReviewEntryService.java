@@ -2,10 +2,10 @@ package com.freshman.freshmanbackend.domain.product.service.command;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.domain.Review;
+import com.freshman.freshmanbackend.domain.product.domain.enums.ReviewType;
 import com.freshman.freshmanbackend.domain.product.repository.ReviewRepository;
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
-import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +33,10 @@ public class ReviewEntryService {
   @Transactional
   public void entry(ReviewEntryRequest param) {
     // 상품 조회
-    Product product = productOneService.getOne(param.getProductSeq(), Valid.TRUE);
+    Product product = productOneService.getOne(param.getProductSeq(), Boolean.TRUE);
 
     // 후기 등록 TODO - 추후에 이미지 추가
-    reviewRepository.save(new Review(param.getContent(), param.getScore(), null, product));
+    reviewRepository.save(
+        new Review(param.getContent(), param.getScore(), ReviewType.fromCode(param.getType()), null, product));
   }
 }

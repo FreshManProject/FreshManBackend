@@ -1,6 +1,7 @@
 package com.freshman.freshmanbackend.domain.product.controller.validator;
 
 import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
+import com.freshman.freshmanbackend.domain.product.domain.enums.ReviewType;
 import com.freshman.freshmanbackend.domain.product.request.ProductCategoryEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductCategoryModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
@@ -9,6 +10,7 @@ import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewModifyRequest;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
 
@@ -87,6 +89,8 @@ public class ProductValidator {
    * @param param 요청 파라미터
    */
   public void validate(ReviewEntryRequest param) {
+    // 상품 일련번호
+    validateProductSeq(param.getProductSeq());
     // 후기 내용
     validateEmpty(param.getContent(), "review.param_content_empty");
     // 별점
@@ -95,8 +99,29 @@ public class ProductValidator {
     if (score < 1 || score > 5) {
       throw new ValidationException("review.param_score_invalid");
     }
-    // 상품 일련번호
-    validateProductSeq(param.getProductSeq());
+    // 후기 타입
+    validateEmpty(param.getType(), "review.param_type_empty");
+    if (!ReviewType.containCode(param.getType())) {
+      throw new ValidationException("review.param_type_invalid");
+    }
+  }
+
+  /**
+   * 후기 수정 요청 유효성 체크
+   *
+   * @param param 요청 파라미터
+   */
+  public void validate(ReviewModifyRequest param) {
+    // 후기 일련번호
+    validateNull(param.getReviewSeq(), "review.param_seq_null");
+    // 후기 내용
+    validateEmpty(param.getContent(), "review.param_content_empty");
+    // 별점
+    Byte score = param.getScore();
+    validateNull(score, "review.param_score_null");
+    if (score < 1 || score > 5) {
+      throw new ValidationException("review.param_score_invalid");
+    }
   }
 
   /**

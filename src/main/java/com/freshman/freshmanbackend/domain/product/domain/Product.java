@@ -1,14 +1,12 @@
 package com.freshman.freshmanbackend.domain.product.domain;
 
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
-import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -67,9 +65,8 @@ public class Product extends BaseTimeEntity {
   /**
    * 유효여부
    */
-  @Convert(converter = Valid.TypeCodeConverter.class)
   @Column(name = "PRD_VLD", nullable = false)
-  private Valid valid = Valid.TRUE;
+  private Boolean valid = Boolean.TRUE;
   /**
    * 상품 이미지 목록
    */
@@ -118,7 +115,7 @@ public class Product extends BaseTimeEntity {
    * 상품 삭제
    */
   public void delete() {
-    this.valid = Valid.FALSE;
+    this.valid = Boolean.FALSE;
   }
 
   /**

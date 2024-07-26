@@ -9,6 +9,7 @@ import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewModifyRequest;
 import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryEntryService;
@@ -17,6 +18,7 @@ import com.freshman.freshmanbackend.domain.product.service.command.ProductDelete
 import com.freshman.freshmanbackend.domain.product.service.command.ProductEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductModifyService;
 import com.freshman.freshmanbackend.domain.product.service.command.ReviewEntryService;
+import com.freshman.freshmanbackend.domain.product.service.command.ReviewModifyService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryListService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductListService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
@@ -60,6 +62,7 @@ public class ProductController {
   private final ProductCategoryListService productCategoryListService;
 
   private final ReviewEntryService reviewEntryService;
+  private final ReviewModifyService reviewModifyService;
 
   private final SearchLogService searchLogService;
 
@@ -254,6 +257,20 @@ public class ProductController {
     ProductValidator.validate(param);
 
     productCategoryModifyService.modify(param);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
+   * 후기 수정
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @PutMapping("reviews")
+  public ResponseEntity<?> doPutReview(@RequestBody ReviewModifyRequest param) {
+    ProductValidator.validate(param);
+
+    reviewModifyService.modify(param);
     return ResponseEntity.ok(new SuccessResponse());
   }
 
