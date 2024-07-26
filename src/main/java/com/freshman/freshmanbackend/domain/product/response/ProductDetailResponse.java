@@ -31,13 +31,13 @@ public class ProductDetailResponse {
    */
   private final Long price;
   /**
+   * 할인 정보
+   */
+  private Sale sale;
+  /**
    * 설명
    */
   private final String description;
-  /**
-   * 할인 가격
-   */
-  private Long salePrice;
   /**
    * 브랜드명
    */
@@ -51,16 +51,17 @@ public class ProductDetailResponse {
     this.productSeq = product.getProductSeq();
     this.name = product.getName();
     this.price = product.getPrice();
-    this.description = product.getDescription();
     if (product.getSale() != null) {
       LocalDateTime startAt = product.getSale().getSaleStartAt();
       LocalDateTime endAt = product.getSale().getSaleEndAt();
       LocalDateTime curTime = LocalDateTime.now();
 
       if ((curTime.isAfter(startAt) || curTime.equals(startAt)) || (curTime.isBefore(endAt) || curTime.equals(endAt))) {
-        salePrice = product.getSale().getSalePrice();
+        long salePrice = product.getSale().getSalePrice();
+        this.sale = new Sale(salePrice, (int) (((float) (price - salePrice) / price) * 100));
       }
     }
+    this.description = product.getDescription();
     this.brand = product.getBrand();
     this.imageList = product.getImageList()
                             .stream()
@@ -68,5 +69,22 @@ public class ProductDetailResponse {
                             .sorted(Comparator.comparing(ProductImage::getOrder))
                             .map(ProductImage::getPath)
                             .toList();
+  }
+
+  @Getter
+  public static class Sale {
+    /**
+     * 할인 가격
+     */
+    private final Long salePrice;
+    /**
+     * 할인율
+     */
+    private final Integer saleRate;
+
+    public Sale(Long salePrice, Integer saleRate) {
+      this.salePrice = salePrice;
+      this.saleRate = saleRate;
+    }
   }
 }
