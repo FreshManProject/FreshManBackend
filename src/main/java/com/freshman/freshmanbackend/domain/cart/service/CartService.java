@@ -54,7 +54,7 @@ public class CartService {
 
   @Transactional
   public void delete(Long cartId) {
-    Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new RuntimeException("Cart not found"));
+    Cart cart = getCart(cartId);
     if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getUserOauth2Id())) {
       throw new RuntimeException("Current member is not authorized to delete cart.");
     }
@@ -70,10 +70,14 @@ public class CartService {
 
   @Transactional
   public void update(CartUpdateRequest cartUpdateRequest, Long cartSeq) {
-    Cart cart = cartRepository.findById(cartSeq).orElseThrow(() -> new RuntimeException("Cart not found"));
+    Cart cart = getCart(cartSeq);
     if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getUserOauth2Id())) {
       throw new ValidationException();
     }
     cart.updateCartQuantity(cartUpdateRequest.getQuantity());
+  }
+
+  private Cart getCart(Long cartId) {
+    return cartRepository.findById(cartId).orElseThrow(() -> new RuntimeException("Cart not found"));
   }
 }
