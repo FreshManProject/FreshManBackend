@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.domain.cart.controller;
 
+import com.freshman.freshmanbackend.domain.cart.controller.validator.CartValidator;
 import com.freshman.freshmanbackend.domain.cart.request.CartEntryRequest;
 import com.freshman.freshmanbackend.domain.cart.request.CartUpdateRequest;
 import com.freshman.freshmanbackend.domain.cart.response.CartInfoResponse;
@@ -32,6 +33,7 @@ public class CartController {
 
   @PostMapping
   public ResponseEntity<?> add(@RequestBody CartEntryRequest cartEntryRequest) {
+    CartValidator.validate(cartEntryRequest);
     cartService.add(cartEntryRequest);
     return ResponseEntity.ok(new SuccessResponse());
   }
@@ -50,6 +52,7 @@ public class CartController {
 
   @PutMapping("/{cartId}")
   public ResponseEntity<?> update(@PathVariable Long cartId, @RequestBody CartUpdateRequest cartUpdateRequest) {
+    CartValidator.validate(cartUpdateRequest);
     cartService.update(cartUpdateRequest, cartId);
     return ResponseEntity.ok(new SuccessResponse());
   }

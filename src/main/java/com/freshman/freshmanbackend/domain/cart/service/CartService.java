@@ -42,9 +42,9 @@ public class CartService {
     Cart cartByMemberIdAndProductId = cartDao.getCartByMemberIdAndProductId(currentMemberSeq, productSeq);
     if (cartByMemberIdAndProductId == null) {
       Product product =
-          productRepository.findById(productSeq).orElseThrow(() -> new RuntimeException("Product not found"));
+          productRepository.findById(productSeq).orElseThrow(() -> new ValidationException("product.not_found"));
       Member member =
-          memberRepository.findById(currentMemberSeq).orElseThrow(() -> new RuntimeException("member not found"));
+          memberRepository.findById(currentMemberSeq).orElseThrow(() -> new ValidationException("member.not_found"));
       Cart cart = new Cart(member, product, quantity);
       cartRepository.save(cart);
       return;
@@ -56,7 +56,7 @@ public class CartService {
   public void delete(Long cartId) {
     Cart cart = getCart(cartId);
     if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getUserOauth2Id())) {
-      throw new RuntimeException("Current member is not authorized to delete cart.");
+      throw new ValidationException("cart.unauthorized");
     }
     cartRepository.deleteById(cartId);
   }
@@ -72,12 +72,12 @@ public class CartService {
   public void update(CartUpdateRequest cartUpdateRequest, Long cartSeq) {
     Cart cart = getCart(cartSeq);
     if (!cart.getMember().getOauth2Id().equals(AuthMemberUtils.getUserOauth2Id())) {
-      throw new ValidationException();
+      throw new ValidationException("cart.unauthorized");
     }
     cart.updateCartQuantity(cartUpdateRequest.getQuantity());
   }
 
   private Cart getCart(Long cartId) {
-    return cartRepository.findById(cartId).orElseThrow(() -> new RuntimeException("Cart not found"));
+    return cartRepository.findById(cartId).orElseThrow(() -> new ValidationException("cart.id_not_found"));
   }
 }
