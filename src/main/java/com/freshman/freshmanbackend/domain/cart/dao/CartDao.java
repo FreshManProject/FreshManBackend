@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class CartDao {
-  QCart qCart = QCart.cart;
-  QMember qMember = QMember.member;
-  QProduct qProduct = QProduct.product;
   private final JPAQueryFactory queryFactory;
 
   public Cart getCartByMemberIdAndProductId(Long memberId, Long productId) {
+    QCart qCart = QCart.cart;
+    QMember qMember = QMember.member;
+    QProduct qProduct = QProduct.product;
     return queryFactory.selectFrom(qCart)
                        .join(qCart.member, qMember)
                        .join(qCart.product, qProduct)
