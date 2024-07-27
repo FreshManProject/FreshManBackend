@@ -38,17 +38,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     } else {
       return null;
     }
-    
+
     String oauth2Id = oauth2Response.getProvider() + oauth2Response.getProviderId();
     Member member = memberRepository.findByOauth2Id(oauth2Id);
     if (member == null) { // 회원가입
       Member newMember = new Member(oauth2Id, Role.USER);
       Member savedMember = memberRepository.save(newMember);
       OauthUserDto userDto = new OauthUserDto(savedMember.getMemberSeq(), oauth2Id, Role.USER.getDesc());
-      return new CustomOauth2User(userDto, memberRepository);
+      return new CustomOauth2User(userDto);
     } else { // 로그인
       OauthUserDto userDto = new OauthUserDto(member.getMemberSeq(), oauth2Id, member.getRole().getDesc());
-      return new CustomOauth2User(userDto, memberRepository);
+      return new CustomOauth2User(userDto);
     }
   }
 }
