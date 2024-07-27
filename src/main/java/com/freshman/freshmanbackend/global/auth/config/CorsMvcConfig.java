@@ -6,19 +6,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 /**
  * CORS 설정
- *
  */
 @Configuration
 public class CorsMvcConfig extends WebMvcConfigurationSupport {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .exposedHeaders("Authorization")
-                .allowCredentials(true)
-                .maxAge(3600);
-    }
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+            .allowedOriginPatterns("*")
+            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .exposedHeaders("access_token")
+            .allowCredentials(true)
+            .maxAge(3600);
+  }
 }
