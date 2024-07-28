@@ -9,6 +9,8 @@ import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewCommentEntryRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewCommentModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewModifyRequest;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
@@ -107,6 +109,18 @@ public class ProductValidator {
   }
 
   /**
+   * 후기 댓글 등록 요청 유효성 체크
+   *
+   * @param param 요청 파라미터
+   */
+  public void validate(ReviewCommentEntryRequest param) {
+    // 후기 일련번호
+    validateNull(param.getReviewSeq(), "review.param_seq_null");
+    // 후기 내용
+    validateEmpty(param.getContent(), "review.comment.param_content_empty");
+  }
+
+  /**
    * 후기 수정 요청 유효성 체크
    *
    * @param param 요청 파라미터
@@ -122,6 +136,18 @@ public class ProductValidator {
     if (score < 1 || score > 5) {
       throw new ValidationException("review.param_score_invalid");
     }
+  }
+
+  /**
+   * 후기 댓글 수정 요청 유효성 체크
+   *
+   * @param param 요청 파라미터
+   */
+  public void validate(ReviewCommentModifyRequest param) {
+    // 댓글 일련번호
+    validateNull(param.getCommentSeq(), "review.comment.param_seq_null");
+    // 댓글 내용
+    validateEmpty(param.getContent(), "review.comment.param_content_empty");
   }
 
   /**

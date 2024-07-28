@@ -8,6 +8,8 @@ import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewCommentEntryRequest;
+import com.freshman.freshmanbackend.domain.product.request.ReviewCommentModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewModifyRequest;
 import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
@@ -17,6 +19,7 @@ import com.freshman.freshmanbackend.domain.product.service.command.ProductCatego
 import com.freshman.freshmanbackend.domain.product.service.command.ProductDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ProductModifyService;
+import com.freshman.freshmanbackend.domain.product.service.command.ReviewDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ReviewEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ReviewModifyService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryListService;
@@ -63,6 +66,7 @@ public class ProductController {
 
   private final ReviewEntryService reviewEntryService;
   private final ReviewModifyService reviewModifyService;
+  private final ReviewDeleteService reviewDeleteService;
 
   private final SearchLogService searchLogService;
 
@@ -74,8 +78,6 @@ public class ProductController {
    */
   @DeleteMapping("/{productSeq}")
   public ResponseEntity<?> doDelete(@PathVariable(required = false) Long productSeq) {
-    ProductValidator.validateProductSeq(productSeq);
-
     productDeleteService.delete(productSeq);
     return ResponseEntity.ok(new SuccessResponse());
   }
@@ -88,9 +90,31 @@ public class ProductController {
    */
   @DeleteMapping("/categories/{categorySeq}")
   public ResponseEntity<?> doDeleteCategory(@PathVariable(required = false) Long categorySeq) {
-    ProductValidator.validateCategorySeq(categorySeq);
-
     productCategoryDeleteService.delete(categorySeq);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
+   * 후기 삭제
+   *
+   * @param reviewSeq 후기 일련번호
+   * @return 요청 결과
+   */
+  @DeleteMapping("/reviews/{reviewSeq}")
+  public ResponseEntity<?> doDeleteReview(@PathVariable(required = false) Long reviewSeq) {
+    reviewDeleteService.delete(reviewSeq);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
+   * 후기 댓글 삭제
+   *
+   * @param commentSeq 댓글 일련번호
+   * @return 요청 결과
+   */
+  @DeleteMapping("/reviews/comments/{commentSeq}")
+  public ResponseEntity<?> doDeleteReviewComment(@PathVariable(required = false) Long commentSeq) {
+    reviewDeleteService.deleteComment(commentSeq);
     return ResponseEntity.ok(new SuccessResponse());
   }
 
@@ -210,8 +234,22 @@ public class ProductController {
    * @param param 요청 파라미터
    * @return 요청 결과
    */
-  @PostMapping("reviews")
+  @PostMapping("/reviews")
   public ResponseEntity<?> doPostReview(@RequestBody ReviewEntryRequest param) {
+    ProductValidator.validate(param);
+
+    reviewEntryService.entry(param);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
+   * 후기 댓글 등록
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @PostMapping("/reviews/comments")
+  public ResponseEntity<?> doPostReviewComment(@RequestBody ReviewCommentEntryRequest param) {
     ProductValidator.validate(param);
 
     reviewEntryService.entry(param);
@@ -266,8 +304,22 @@ public class ProductController {
    * @param param 요청 파라미터
    * @return 요청 결과
    */
-  @PutMapping("reviews")
+  @PutMapping("/reviews")
   public ResponseEntity<?> doPutReview(@RequestBody ReviewModifyRequest param) {
+    ProductValidator.validate(param);
+
+    reviewModifyService.modify(param);
+    return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  /**
+   * 후기 댓글 수정
+   *
+   * @param param 요청 파라미터
+   * @return 요청 결과
+   */
+  @PutMapping("/reviews/comments")
+  public ResponseEntity<?> doPutReviewComment(@RequestBody ReviewCommentModifyRequest param) {
     ProductValidator.validate(param);
 
     reviewModifyService.modify(param);

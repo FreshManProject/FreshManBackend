@@ -6,15 +6,21 @@ import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -74,6 +80,13 @@ public class Review extends BaseTimeEntity {
   @ManyToOne
   @JoinColumn(name = "PRD_SEQ")
   private Product product;
+  /**
+   * 댓글 목록
+   */
+  @Getter
+  @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, orphanRemoval = true,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private final List<ReviewComment> commentList = new ArrayList<>();
 
   public Review(String content, Byte score, ReviewType type, String imagePath, Product product) {
     this.content = content;
