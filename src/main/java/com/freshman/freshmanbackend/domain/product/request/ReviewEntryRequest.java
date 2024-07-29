@@ -22,8 +22,4 @@ public class ReviewEntryRequest {
    * 별점
    */
   private Byte score;
-  /**
-   * 후기 타입
-   */
-  private String type;
 }

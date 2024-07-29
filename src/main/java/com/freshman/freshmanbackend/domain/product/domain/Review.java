@@ -1,6 +1,5 @@
 package com.freshman.freshmanbackend.domain.product.domain;
 
-import com.freshman.freshmanbackend.domain.product.domain.enums.ReviewType;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
@@ -53,12 +51,6 @@ public class Review extends BaseTimeEntity {
   @Column(name = "RVW_SCR", nullable = false)
   private Byte score;
   /**
-   * 후기 타입
-   */
-  @Convert(converter = ReviewType.TypeCodeConverter.class)
-  @Column(name = "RVW_TYP", nullable = false)
-  private ReviewType type;
-  /**
    * 이미지 경로
    */
   @Column(name = "RVW_IMG_PATH")
@@ -88,10 +80,9 @@ public class Review extends BaseTimeEntity {
       cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private final List<ReviewComment> commentList = new ArrayList<>();
 
-  public Review(String content, Byte score, ReviewType type, String imagePath, Product product) {
+  public Review(String content, Byte score, String imagePath, Product product) {
     this.content = content;
     this.score = score;
-    this.type = type;
     this.imagePath = imagePath;
     this.product = product;
   }

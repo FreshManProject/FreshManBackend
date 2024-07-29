@@ -1,7 +1,6 @@
 package com.freshman.freshmanbackend.domain.product.controller.validator;
 
 import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
-import com.freshman.freshmanbackend.domain.product.domain.enums.ReviewType;
 import com.freshman.freshmanbackend.domain.product.request.ProductCategoryEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductCategoryModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
@@ -100,11 +99,6 @@ public class ProductValidator {
     validateNull(score, "review.param_score_null");
     if (score < 1 || score > 5) {
       throw new ValidationException("review.param_score_invalid");
-    }
-    // 후기 타입
-    validateEmpty(param.getType(), "review.param_type_empty");
-    if (!ReviewType.containCode(param.getType())) {
-      throw new ValidationException("review.param_type_invalid");
     }
   }
 
