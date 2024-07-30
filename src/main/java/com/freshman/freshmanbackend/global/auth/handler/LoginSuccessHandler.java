@@ -5,7 +5,6 @@ import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.common.utils.HttpUtils;
 import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -37,8 +36,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     redisRefreshTokenService.removeRefreshToken(oauth2Id);
     redisRefreshTokenService.saveRefreshToken(refreshToken, oauth2Id);
 
-    response.setHeader("access_token", accessToken);
     response.addCookie(HttpUtils.createCookie("refresh_token", refreshToken));
-    response.setStatus(HttpStatus.OK.value());
+    response.sendRedirect("http://localhost:3000/authorize?access_token=" + accessToken);
   }
 }
