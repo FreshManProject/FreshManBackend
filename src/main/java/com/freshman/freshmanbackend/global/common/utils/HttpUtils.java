@@ -9,25 +9,30 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class HttpUtils {
-    public Cookie createCookie(String key, String value) {
+  public Cookie createCookie(String key, String value) {
 
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        cookie.setHttpOnly(true);
+    Cookie cookie = new Cookie(key, value);
+    cookie.setMaxAge(24 * 60 * 60);
+    cookie.setPath("/reissue");
+    //cookie.setSecure(true);
+    cookie.setHttpOnly(true);
 
-        return cookie;
+    return cookie;
+  }
+
+  public String getCookieValueByCookieKey(HttpServletRequest request, String cookieName) {
+    if (request == null || cookieName == null) {
+      return null;
     }
-
-    public String getCookieValueByCookieKey(HttpServletRequest request,String cookieName) {
-        if (request == null || cookieName == null) return null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) return null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(cookieName)) {
-                return cookie.getValue();
-            }
-        }
-        return null;
+    Cookie[] cookies = request.getCookies();
+    if (cookies == null) {
+      return null;
     }
+    for (Cookie cookie : cookies) {
+      if (cookie.getName().equals(cookieName)) {
+        return cookie.getValue();
+      }
+    }
+    return null;
+  }
 }
