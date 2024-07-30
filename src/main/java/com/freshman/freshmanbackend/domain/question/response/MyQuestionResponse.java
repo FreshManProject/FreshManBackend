@@ -2,22 +2,23 @@ package com.freshman.freshmanbackend.domain.question.response;
 
 import java.time.LocalDate;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 문의 응답 객체
+ * 내 질문 응답
  */
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-public class ProductQuestionResponse {
+public class MyQuestionResponse {
   private String memberName;
   private String content;
   private String image;
-  private Boolean isAnswered;
   private LocalDate postedDate;
+  private Boolean isAnswered;
+  private String productName;
+  private String productImage;
+  private Long productSeq;
 }
