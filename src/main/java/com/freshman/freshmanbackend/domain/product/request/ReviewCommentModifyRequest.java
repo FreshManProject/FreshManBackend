@@ -4,22 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 후기 등록 요청
+ * 후기 댓글 수정 요청
  */
 @Getter
 @Setter
-public class ReviewEntryRequest {
+public class ReviewCommentModifyRequest {
 
   /**
-   * 상품 일련번호
+   * 댓글 일련번호
    */
-  private Long productSeq;
+  private Long commentSeq;
   /**
-   * 후기 내용
+   * 댓글 내용
    */
   private String content;
-  /**
-   * 별점
-   */
-  private Byte score;
 }

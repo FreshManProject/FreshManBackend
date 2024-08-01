@@ -6,7 +6,6 @@ import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
 import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
-import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.OrderSpecifier;
@@ -80,7 +79,7 @@ public class ProductListDao {
     QProduct product = QProduct.product;
 
     // 유효여부
-    booleanBuilder.and(product.valid.eq(Valid.TRUE));
+    booleanBuilder.and(product.valid.eq(Boolean.TRUE));
     // 카테고리
     booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));
 
@@ -104,7 +103,7 @@ public class ProductListDao {
     QProduct product = QProduct.product;
 
     // 유효여부
-    booleanBuilder.and(product.valid.eq(Valid.TRUE));
+    booleanBuilder.and(product.valid.eq(Boolean.TRUE));
     // 카테고리
     if (param.getCategorySeq() != null) {
       booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));

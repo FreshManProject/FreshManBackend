@@ -3,7 +3,6 @@ package com.freshman.freshmanbackend.domain.product.service.command;
 import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.domain.ProductSale;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
-import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class ProductDeleteService {
   @Transactional
   public void delete(Long productSeq) {
     // 상품 조회
-    Product product = productOneService.getOne(productSeq, Valid.TRUE);
+    Product product = productOneService.getOne(productSeq, Boolean.TRUE);
 
     // 상품 삭제 처리
     product.delete();
@@ -44,7 +43,7 @@ public class ProductDeleteService {
   @Transactional
   public void deleteSale(Long productSeq) {
     // 상품 조회
-    Product product = productOneService.getOne(productSeq, Valid.TRUE);
+    Product product = productOneService.getOne(productSeq, Boolean.TRUE);
 
     // 할인정보 존재여부 검증
     verifySaleNotExists(product.getSale());

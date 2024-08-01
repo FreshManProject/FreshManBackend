@@ -7,7 +7,6 @@ import com.freshman.freshmanbackend.domain.product.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryOneService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
-import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
 
@@ -36,7 +35,7 @@ public class ProductModifyService {
   @Transactional
   public void modify(ProductModifyRequest param) {
     // 상품 및 카테고리 조회
-    Product product = productOneService.getOne(param.getProductSeq(), Valid.TRUE);
+    Product product = productOneService.getOne(param.getProductSeq(), Boolean.TRUE);
     ProductCategory category = productCategoryOneService.getOne(param.getCategorySeq());
 
     // 상품 정보 수정
@@ -51,7 +50,7 @@ public class ProductModifyService {
   @Transactional
   public void modify(ProductSaleRequest param) {
     // 상품 할인정보 조회
-    ProductSale sale = productOneService.getOne(param.getProductSeq(), Valid.TRUE).getSale();
+    ProductSale sale = productOneService.getOne(param.getProductSeq(), Boolean.TRUE).getSale();
 
     // 할인정보 존재여부 검증
     verifySaleNotExists(sale);

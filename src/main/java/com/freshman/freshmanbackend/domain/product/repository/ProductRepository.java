@@ -1,7 +1,6 @@
 package com.freshman.freshmanbackend.domain.product.repository;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
-import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,5 +13,5 @@ import java.util.Optional;
  */
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-  Optional<Product> findByProductSeqAndValid(Long productSeq, Valid valid);
+  Optional<Product> findByProductSeqAndValid(Long productSeq, Boolean valid);
 }

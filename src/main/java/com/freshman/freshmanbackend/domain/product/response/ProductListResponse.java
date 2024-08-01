@@ -24,9 +24,9 @@ public class ProductListResponse {
    */
   private final Long price;
   /**
-   * 할인 가격
+   * 할인 정보
    */
-  private final Long salePrice;
+  private Sale sale;
   /**
    * 브랜드명
    */
@@ -40,8 +40,27 @@ public class ProductListResponse {
     this.productSeq = productSeq;
     this.name = name;
     this.price = price;
-    this.salePrice = salePrice;
+    if (salePrice != null) {
+      this.sale = new Sale(salePrice, (int) (((float) (price - salePrice) / price) * 100));
+    }
     this.brand = brand;
     this.image = "";
+  }
+
+  @Getter
+  public static class Sale {
+    /**
+     * 할인 가격
+     */
+    private final Long salePrice;
+    /**
+     * 할인율
+     */
+    private final Integer saleRate;
+
+    public Sale(Long salePrice, Integer saleRate) {
+      this.salePrice = salePrice;
+      this.saleRate = saleRate;
+    }
   }
 }

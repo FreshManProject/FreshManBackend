@@ -8,7 +8,6 @@ import com.freshman.freshmanbackend.domain.product.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryOneService;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
-import com.freshman.freshmanbackend.global.common.domain.enums.Valid;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import com.freshman.freshmanbackend.global.common.utils.DateTimeUtils;
 
@@ -54,7 +53,7 @@ public class ProductEntryService {
   @Transactional
   public void entry(ProductSaleRequest param) {
     // 상품 조회
-    Product product = productOneService.getOne(param.getProductSeq(), Valid.TRUE);
+    Product product = productOneService.getOne(param.getProductSeq(), Boolean.TRUE);
 
     // 할인정보 존재여부 검증
     verifySaleExists(product.getSale());
