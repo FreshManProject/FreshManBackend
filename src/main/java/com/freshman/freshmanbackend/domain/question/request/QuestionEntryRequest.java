@@ -2,6 +2,8 @@ package com.freshman.freshmanbackend.domain.question.request;
 
 import com.freshman.freshmanbackend.domain.question.domain.Question;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +17,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionEntryRequest {
-  private String title;
   private String content;
   private String type;
+  private MultipartFile image;
 
   public Question toQuestionEntity() {
-    return new Question(title, content, type);
+    return new Question(content, type);
   }
 }
