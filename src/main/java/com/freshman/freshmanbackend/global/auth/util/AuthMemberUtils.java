@@ -1,6 +1,7 @@
 package com.freshman.freshmanbackend.global.auth.util;
 
 import com.freshman.freshmanbackend.global.auth.dto.CustomOauth2User;
+import com.freshman.freshmanbackend.global.auth.dto.OauthUserDto;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +24,11 @@ public class AuthMemberUtils {
   public Long getMemberSeq() {
     CustomOauth2User oauth2User = (CustomOauth2User) getAuthentication().getPrincipal();
     return oauth2User.getMemberSeq();
+  }
+
+  public OauthUserDto getOauthUserDto() {
+    CustomOauth2User oauth2User = (CustomOauth2User) getAuthentication().getPrincipal();
+    return oauth2User.getOathUserDto();
   }
 
   public String getUserOauth2Id() {

@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.domain.product.domain;
 
+import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 
 import java.util.ArrayList;
@@ -79,6 +80,9 @@ public class Product extends BaseTimeEntity {
       cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private ProductSale sale;
 
+  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+  private List<Question> questionList = new ArrayList<>();
+
   public Product(String name, Long price, String description, String brand, ProductCategory category) {
     this.name = name;
     this.price = price;
@@ -101,6 +105,11 @@ public class Product extends BaseTimeEntity {
       this.imageList.add(image);
       image.setProduct(this);
     }
+  }
+
+  public void addQuestion(Question question) {
+    this.questionList.add(question);
+    question.setProduct(this);
   }
 
   /**

@@ -3,6 +3,7 @@ package com.freshman.freshmanbackend.domain.member.domain;
 import com.freshman.freshmanbackend.domain.cart.domain.Cart;
 import com.freshman.freshmanbackend.domain.member.domain.enums.Role;
 import com.freshman.freshmanbackend.domain.member.request.MemberUpdateRequest;
+import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 
 import java.util.List;
@@ -55,12 +56,25 @@ public class Member extends BaseTimeEntity {
   private Boolean init;
 
   @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+  private List<Question> questions;
+
+  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
   private List<Cart> carts;
 
   public Member(String oauth2Id, Role role) {
     this.oauth2Id = oauth2Id;
     this.role = role;
     this.init = false;
+  }
+
+  /**
+   * 멤버에게 문의 등록
+   *
+   * @param question
+   */
+  public void addQuestion(Question question) {
+    questions.add(question);
+    question.setMember(this);
   }
 
   //Oauth로 회원 가입 후 멤버 정보 등록

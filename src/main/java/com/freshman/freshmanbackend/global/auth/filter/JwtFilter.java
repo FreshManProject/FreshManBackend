@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.global.auth.filter;
 
+import com.freshman.freshmanbackend.domain.member.domain.Member;
 import com.freshman.freshmanbackend.domain.member.repository.MemberRepository;
 import com.freshman.freshmanbackend.global.auth.dto.CustomOauth2User;
 import com.freshman.freshmanbackend.global.auth.dto.OauthUserDto;
@@ -62,10 +63,10 @@ public class JwtFilter extends OncePerRequestFilter {
     //토큰에서 oauth2Id과 role 획득
     String oauth2Id = jwtUtil.getOauth2Id(accessToken);
     String role = jwtUtil.getRole(accessToken);
-    Long memberSeq = memberRepository.findByOauth2Id(oauth2Id).getMemberSeq();
+    Member member = memberRepository.findByOauth2Id(oauth2Id);
 
     //userDTO를 생성하여 값 set
-    OauthUserDto userDTO = new OauthUserDto(memberSeq, oauth2Id, role);
+    OauthUserDto userDTO = OauthUserDto.fromMember(member, role);
 
     //UserDetails에 회원 정보 객체 담기
     CustomOauth2User customOAuth2User = new CustomOauth2User(userDTO);
