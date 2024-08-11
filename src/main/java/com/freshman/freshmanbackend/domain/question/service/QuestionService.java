@@ -10,6 +10,7 @@ import com.freshman.freshmanbackend.domain.question.request.QuestionEntryRequest
 import com.freshman.freshmanbackend.domain.question.response.MyQuestionResponse;
 import com.freshman.freshmanbackend.domain.question.response.ProductQuestionResponse;
 import com.freshman.freshmanbackend.global.auth.util.AuthMemberUtils;
+import com.freshman.freshmanbackend.global.cloud.service.S3UploadService;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class QuestionService {
   private final QuestionRepository questionRepository;
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
+  private final S3UploadService s3UploadService;
 
   /**
    * 문의 삭제
@@ -85,6 +88,12 @@ public class QuestionService {
     Question questionEntity = questionEntryRequest.toQuestionEntity();
     member.addQuestion(questionEntity);
     product.addQuestion(questionEntity);
+    try {
+      String url = s3UploadService.saveFile(questionEntryRequest.getImage());
+      questionEntity.setImage(url);
+    } catch (IOException e) {
+      throw new ValidationException("s3.save_failed");
+    }
     questionRepository.save(questionEntity);
   }
 }
