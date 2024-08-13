@@ -5,12 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 
 /**
  * 이미지 공통 엔티티
  */
 @Entity
+@Table(name = "IMAGE")
 @NoArgsConstructor
 public class Image {
   @Id
