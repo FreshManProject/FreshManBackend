@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.member.repository.MemberRepository;
 import com.freshman.freshmanbackend.global.auth.filter.JwtFilter;
 import com.freshman.freshmanbackend.global.auth.filter.JwtLogoutFilter;
 import com.freshman.freshmanbackend.global.auth.handler.LoginSuccessHandler;
+import com.freshman.freshmanbackend.global.auth.handler.RestAuthenticationEntryPoint;
 import com.freshman.freshmanbackend.global.auth.service.CustomOAuth2UserService;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
@@ -35,6 +36,7 @@ public class SecurityConfig {
   private final CustomOAuth2UserService customOAuth2UserService;
   private final LoginSuccessHandler loginSuccessHandler;
   private final RedisRefreshTokenService redisRefreshTokenService;
+  private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil, MemberRepository memberRepository)
@@ -63,6 +65,8 @@ public class SecurityConfig {
         .oauth2Login((oauth2) -> oauth2.userInfoEndpoint(
                                            (userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
                                        .successHandler(loginSuccessHandler))
+        .exceptionHandling(
+            exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint))
         .addFilterBefore(new JwtFilter(jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new JwtLogoutFilter(jwtUtil, redisRefreshTokenService), LogoutFilter.class)
         .authorizeHttpRequests(
