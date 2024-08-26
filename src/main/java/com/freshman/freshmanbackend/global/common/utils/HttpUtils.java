@@ -14,7 +14,8 @@ public class HttpUtils {
     Cookie cookie = new Cookie(key, value);
     cookie.setMaxAge(24 * 60 * 60);
     cookie.setPath("/reissue");
-    //cookie.setSecure(true);
+    cookie.setDomain("localhost");
+    //    cookie.setSecure(true);
     cookie.setHttpOnly(true);
 
     return cookie;
