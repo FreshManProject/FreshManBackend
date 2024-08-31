@@ -1,6 +1,5 @@
 package com.freshman.freshmanbackend.global.auth.service;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.freshman.freshmanbackend.global.auth.dto.Tokens;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
@@ -9,7 +8,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 
 /**
  * JWT 재발급을 처리하는 서비스
@@ -37,7 +35,7 @@ public class JwtReissueService {
         String newRefreshToken = jwtUtil.createJwt("refresh_token", oauth2Id, role, 86400000L);
 
         redisRefreshTokenService.removeRefreshToken(oauth2Id);
-        redisRefreshTokenService.saveRefreshToken(oauth2Id, newRefreshToken);
+        redisRefreshTokenService.saveRefreshToken(newRefreshToken,oauth2Id);
 
         return new Tokens(newAccessToken, newRefreshToken);
     }
