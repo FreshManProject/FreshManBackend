@@ -9,14 +9,7 @@ import com.freshman.freshmanbackend.global.common.response.ListResponse;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,8 +38,8 @@ public class CartController {
   }
 
   @GetMapping
-  public ResponseEntity<?> get() {
-    List<CartInfoResponse> cartInfoResponses = cartService.getUserCartsList();
+  public ResponseEntity<?> get(@RequestParam("page") int page) {
+    List<CartInfoResponse> cartInfoResponses = cartService.getUserCartsList(page);
     return ResponseEntity.ok(new ListResponse(cartInfoResponses));
   }
 

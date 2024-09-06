@@ -26,4 +26,9 @@ public class ProductListRequest {
    * 정렬
    */
   private String sort;
+
+  /**
+   * 페이지
+   */
+  private Integer page;
 }

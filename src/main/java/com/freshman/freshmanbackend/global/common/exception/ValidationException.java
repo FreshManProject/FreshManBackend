@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 유효성 검사 에러
  *
- * @author 송병선
+ * 
  */
 @Getter
 @RequiredArgsConstructor

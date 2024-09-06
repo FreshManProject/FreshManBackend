@@ -9,7 +9,7 @@ import jakarta.persistence.AttributeConverter;
 /**
  * JPA Entity Enum Converter
  *
- * @author 송병선
+ * 
  */
 public abstract class AbstractEnumCodeConverter<E extends Enum<E> & Codable> implements AttributeConverter<E, String> {
   

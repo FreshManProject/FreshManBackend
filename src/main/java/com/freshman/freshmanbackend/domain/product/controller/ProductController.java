@@ -46,7 +46,6 @@ import lombok.RequiredArgsConstructor;
 /**
  * 상품 API
  *
- * @author 송병선
  */
 @RestController
 @RequiredArgsConstructor

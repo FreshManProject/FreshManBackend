@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 상품 등록 서비스
  *
- * @author 송병선
+ * 
  */
 @Service
 @RequiredArgsConstructor

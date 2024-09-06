@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 /**
  * code 필드를 가지는 Enum 공통 인터페이스
  *
- * @author 송병선
+ * 
  */
 public interface Codable {
 

@@ -10,7 +10,7 @@ import lombok.ToString;
 /**
  * 단일 데이터와 목록 조회 공통 응답 형식
  *
- * @author 송병선
+ * 
  */
 @Getter
 @ToString

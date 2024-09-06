@@ -10,7 +10,7 @@ import lombok.Getter;
 /**
  * 유효여부
  *
- * @author 송병선
+ * 
  */
 @Getter
 public enum Valid implements Codable {

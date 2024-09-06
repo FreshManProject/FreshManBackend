@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * 후기 댓글 JPA Repository
  *
- * @author 송병선
+ * 
  */
 public interface ReviewCommentRepository extends JpaRepository<ReviewComment, Long> {
 }

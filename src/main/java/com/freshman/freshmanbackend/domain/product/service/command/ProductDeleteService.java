@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 상품 삭제 서비스
  *
- * @author 송병선
+ * 
  */
 @Service
 @RequiredArgsConstructor

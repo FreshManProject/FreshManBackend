@@ -22,7 +22,7 @@ import lombok.experimental.UtilityClass;
 /**
  * 상품 요청 파라미터 검증
  *
- * @author 송병선
+ * 
  */
 @UtilityClass
 public class ProductValidator {

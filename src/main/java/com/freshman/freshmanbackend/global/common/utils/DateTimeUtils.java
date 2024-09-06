@@ -13,7 +13,7 @@ import lombok.experimental.UtilityClass;
 /**
  * 날짜/시간 유틸
  *
- * @author 송병선
+ * 
  */
 @UtilityClass
 public class DateTimeUtils {

@@ -13,7 +13,7 @@ import lombok.Getter;
 /**
  * 공통 등록/수정일시 엔티티
  *
- * @author 송병선
+ * 
  */
 @Getter
 @MappedSuperclass

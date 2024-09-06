@@ -11,7 +11,7 @@ import lombok.Getter;
 /**
  * 상품 이미지 타입
  *
- * @author 송병선
+ * 
  */
 @Getter
 public enum ProductImageType implements Codable {

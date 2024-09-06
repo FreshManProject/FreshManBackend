@@ -20,7 +20,7 @@ import static com.freshman.freshmanbackend.domain.product.service.SearchLogServi
 /**
  * 유효기간이 지난 최근 검색어 삭제 작업
  *
- * @author 송병선
+ * 
  */
 @Component
 @RequiredArgsConstructor

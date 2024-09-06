@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 상품 정렬 타입
  *
- * @author 송병선
+ * 
  */
 @Getter
 public enum ProductSortType {

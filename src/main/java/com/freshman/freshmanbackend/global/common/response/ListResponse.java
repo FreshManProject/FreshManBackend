@@ -9,7 +9,7 @@ import lombok.Getter;
 /**
  * 목록 조회 공통 응답 형식
  *
- * @author 송병선
+ * 
  */
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)

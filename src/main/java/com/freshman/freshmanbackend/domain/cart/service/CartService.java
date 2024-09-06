@@ -14,6 +14,9 @@ import com.freshman.freshmanbackend.domain.product.repository.ProductRepository;
 import com.freshman.freshmanbackend.global.auth.util.AuthMemberUtils;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,9 +65,11 @@ public class CartService {
   }
 
   @Transactional(readOnly = true)
-  public List<CartInfoResponse> getUserCartsList() {
+  public List<CartInfoResponse> getUserCartsList(int page) {
     Long currentMemberSeq = AuthMemberUtils.getMemberSeq();
-    List<Cart> carts = cartListDao.getByMemberSeq(currentMemberSeq);
+    PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC));
+    Page<Cart> carts = cartRepository.findAll(pageRequest);
+//    List<Cart> carts = cartListDao.getByMemberSeq(currentMemberSeq);
     return carts.stream().map(CartInfoResponse::fromCart).collect(Collectors.toList());
   }
 

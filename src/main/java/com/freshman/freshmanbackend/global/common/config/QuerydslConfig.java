@@ -11,7 +11,7 @@ import jakarta.persistence.PersistenceContext;
 /**
  * Querydsl Configuration
  *
- * @author 송병선
+ * 
  */
 @Configuration
 public class QuerydslConfig {

@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 성공 공통 응답 형식
  *
- * @author 송병선
+ * 
  */
 @Getter
 public class SuccessResponse {

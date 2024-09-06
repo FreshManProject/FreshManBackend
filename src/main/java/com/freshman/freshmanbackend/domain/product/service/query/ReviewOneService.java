@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 후기 단일 조회 서비스
  *
- * @author 송병선
+ * 
  */
 @Service
 @RequiredArgsConstructor

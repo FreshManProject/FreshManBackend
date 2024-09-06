@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * 상품 카테고리 JPA Repository
  *
- * @author 송병선
+ * 
  */
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
 

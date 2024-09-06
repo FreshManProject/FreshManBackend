@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * 등록자 정보
  *
- * @author 송병선
+ * 
  */
 @Component
 public class MemberAuditorAware implements AuditorAware<Long> {

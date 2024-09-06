@@ -8,7 +8,7 @@ import jakarta.persistence.Converter;
 /**
  * Boolean -> DB 문자로 변경
  *
- * @author 송병선
+ * 
  */
 @Converter(autoApply = true)
 public class BooleanToStringConverter implements AttributeConverter<Boolean, String> {

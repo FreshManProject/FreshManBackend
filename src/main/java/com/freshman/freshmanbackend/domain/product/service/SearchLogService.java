@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 상품 최근 검색어 서비스
  *
- * @author 송병선
+ * 
  */
 @Service
 @RequiredArgsConstructor

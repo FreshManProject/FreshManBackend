@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 /**
  * 최근 검색어 저장 객체
  *
- * @author 송병선
+ * 
  */
 @Getter
 @NoArgsConstructor

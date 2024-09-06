@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * 상품 카테고리 단일 조회 서비스
  *
- * @author 송병선
+ * 
  */
 @Service
 @RequiredArgsConstructor
