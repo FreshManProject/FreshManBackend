@@ -16,12 +16,14 @@ public class MemberResponse {
     private String email;
     private String address;
     private String phone;
+    private Boolean initialized;
 
     public static MemberResponse toResponse(Member member) {
         return new MemberResponse(
                 member.getName(),
                 member.getEmail(),
                 member.getAddress(),
-                member.getPhoneNumber());
+                member.getPhoneNumber(),
+                member.getInit());
     }
 }
