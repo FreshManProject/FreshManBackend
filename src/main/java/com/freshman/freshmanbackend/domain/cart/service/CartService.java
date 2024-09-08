@@ -66,7 +66,7 @@ public class CartService {
   @Transactional(readOnly = true)
   public List<CartInfoResponse> getUserCartsList(int page) {
     Long currentMemberSeq = AuthMemberUtils.getMemberSeq();
-    PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC));
+    PageRequest pageRequest = PageRequest.of(page, 10);
     Page<Cart> carts = cartRepository.findPageByMember_MemberSeq(currentMemberSeq,pageRequest);
 //    List<Cart> carts = cartListDao.getByMemberSeq(currentMemberSeq);
     return carts.stream().map(CartInfoResponse::fromCart).collect(Collectors.toList());
