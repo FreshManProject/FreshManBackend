@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.domain.product.repository;
 
 import com.freshman.freshmanbackend.domain.product.domain.Review;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

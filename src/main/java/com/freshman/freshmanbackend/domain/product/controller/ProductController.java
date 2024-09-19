@@ -22,9 +22,7 @@ import com.freshman.freshmanbackend.domain.product.service.command.ProductModify
 import com.freshman.freshmanbackend.domain.product.service.command.ReviewDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.ReviewEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.ReviewModifyService;
-import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryListService;
-import com.freshman.freshmanbackend.domain.product.service.query.ProductListService;
-import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
+import com.freshman.freshmanbackend.domain.product.service.query.*;
 import com.freshman.freshmanbackend.global.common.response.DataResponse;
 import com.freshman.freshmanbackend.global.common.response.ListResponse;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
@@ -295,6 +293,11 @@ public class ProductController {
 
     productCategoryModifyService.modify(param);
     return ResponseEntity.ok(new SuccessResponse());
+  }
+
+  @GetMapping("/{productSeq}/reviews")
+  public ResponseEntity<?> doGetReviews(@PathVariable Long productSeq){
+
   }
 
   /**
