@@ -25,6 +25,7 @@ import com.freshman.freshmanbackend.domain.product.service.command.ReviewModifyS
 import com.freshman.freshmanbackend.domain.product.service.query.*;
 import com.freshman.freshmanbackend.global.common.response.DataResponse;
 import com.freshman.freshmanbackend.global.common.response.ListResponse;
+import com.freshman.freshmanbackend.global.common.response.NoOffsetPageResponse;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
 
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,7 @@ public class ProductController {
   private final ReviewDeleteService reviewDeleteService;
 
   private final SearchLogService searchLogService;
+  private final ReviewListService reviewListService;
 
   /**
    * 상품 삭제
@@ -295,9 +297,38 @@ public class ProductController {
     return ResponseEntity.ok(new SuccessResponse());
   }
 
+  /**
+   * 후기 조회
+   * @param productSeq
+   * @return 후기 리스트
+   */
   @GetMapping("/{productSeq}/reviews")
-  public ResponseEntity<?> doGetReviews(@PathVariable Long productSeq){
+  public ResponseEntity<?> doGetReviews(@PathVariable Long productSeq, @RequestParam(value = "page", required = false, defaultValue = "0") int page){
+    NoOffsetPageResponse reviews = reviewListService.getReviewsByProductSeq(productSeq, page);
+    return ResponseEntity.ok(reviews);
+  }
 
+  /**
+   * 후기 댓글 조회
+   * @param reviewSeq
+   * @return 후기 댓글 리스트
+   */
+  @GetMapping("/reviews/{reviewSeq}/comments")
+  public ResponseEntity<?> doGetReviewComments(@PathVariable("reviewSeq") Long reviewSeq, @RequestParam("page") int page){
+    NoOffsetPageResponse comments = reviewListService.getReviewCommentsByReviewSeq(reviewSeq, page);
+    return ResponseEntity.ok(comments);
+  }
+
+  /**
+   * 후기 대댓글 조회
+   * @param commentSeq
+   * @param page
+   * @return 후기 대댓글 리스트
+   */
+  @GetMapping("/reviews/comments/{commentSeq}/replies")
+  public ResponseEntity<?> doGetReviewCommentReplies(@PathVariable("commentSeq") Long commentSeq, @RequestParam("page") int page){
+    NoOffsetPageResponse comments = reviewListService.getReviewCommentsByParentCommentSeq(commentSeq, page);
+    return ResponseEntity.ok(comments);
   }
 
   /**
