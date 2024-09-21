@@ -299,7 +299,7 @@ public class ProductController {
 
   /**
    * 후기 조회
-   * @param productSeq
+   * @param productSeq 상품 아이디
    * @return 후기 리스트
    */
   @GetMapping("/{productSeq}/reviews")
@@ -310,7 +310,7 @@ public class ProductController {
 
   /**
    * 후기 댓글 조회
-   * @param reviewSeq
+   * @param reviewSeq 리뷰 아이디
    * @return 후기 댓글 리스트
    */
   @GetMapping("/reviews/{reviewSeq}/comments")
@@ -321,8 +321,8 @@ public class ProductController {
 
   /**
    * 후기 대댓글 조회
-   * @param commentSeq
-   * @param page
+   * @param commentSeq 댓글 아이디
+   * @param page 페이지
    * @return 후기 대댓글 리스트
    */
   @GetMapping("/reviews/comments/{commentSeq}/replies")
