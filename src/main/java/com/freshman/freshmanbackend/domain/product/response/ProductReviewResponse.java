@@ -9,9 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductReviewResponse {
     private Long reviewSeq;
@@ -19,5 +20,5 @@ public class ProductReviewResponse {
     private String content;
     private Byte score;
     private String imagePath;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }
