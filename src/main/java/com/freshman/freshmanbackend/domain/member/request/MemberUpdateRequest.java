@@ -19,5 +19,7 @@ public class MemberUpdateRequest {
     @NotNull
     private String address;
     @NotNull
+    private String addressDetail;
+    @NotNull
     private String phone;
 }
