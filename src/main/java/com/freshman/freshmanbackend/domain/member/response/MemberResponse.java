@@ -15,6 +15,7 @@ public class MemberResponse {
     private String name;
     private String email;
     private String address;
+    private String addressDetail;
     private String phone;
     private Boolean initialized;
 
@@ -23,6 +24,7 @@ public class MemberResponse {
                 member.getName(),
                 member.getEmail(),
                 member.getAddress(),
+                member.getAddressDetail(),
                 member.getPhoneNumber(),
                 member.getInit());
     }
