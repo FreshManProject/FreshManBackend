@@ -2,6 +2,8 @@ package com.freshman.freshmanbackend.domain.member.domain;
 
 import com.freshman.freshmanbackend.domain.cart.domain.Cart;
 import com.freshman.freshmanbackend.domain.member.domain.enums.Role;
+import com.freshman.freshmanbackend.domain.member.request.MemberAddressUpdateRequest;
+import com.freshman.freshmanbackend.domain.member.request.MemberInfoUpdateRequest;
 import com.freshman.freshmanbackend.domain.member.request.MemberUpdateRequest;
 import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
@@ -41,6 +43,9 @@ public class Member extends BaseTimeEntity {
 
   @Column(name = "MB_ADDR")
   private String address;
+
+  @Column(name = "MB_ADDR_DTL")
+  private String addressDetail;
 
   @Column(name = "MB_PH_NBR")
   private String phoneNumber;
@@ -82,16 +87,41 @@ public class Member extends BaseTimeEntity {
     this.name = registerRequest.getName();
     this.email = registerRequest.getEmail();
     this.address = registerRequest.getAddress();
+    this.addressDetail = registerRequest.getAddressDetail();
     this.phoneNumber = registerRequest.getPhone();
     this.init = true;
     return this;
   }
 
-  //멤버 정보 수정
+  /**
+   * 멤버 정보 업데이트
+   * @param request 멤버 정보
+   */
+  public void updateInfo(MemberInfoUpdateRequest request){
+    this.name = request.getName();
+    this.email = request.getEmail();
+    this.phoneNumber = request.getPhone();
+  }
+
+  /**
+   * 멤버 주소 업데이트
+   * @param request 멤버 주소
+   */
+  public void updateAddress(MemberAddressUpdateRequest request){
+    this.address = request.getAddress();
+    this.addressDetail = request.getAddressDetails();
+  }
+
+  /**
+   * 멤버 정보 전체 업데이트
+   * @param updateRequest
+   * @return 멤버
+   */
   public Member updateMember(MemberUpdateRequest updateRequest) {
     this.name = updateRequest.getName();
     this.email = updateRequest.getEmail();
     this.address = updateRequest.getAddress();
+    this.addressDetail = updateRequest.getAddressDetail();
     this.phoneNumber = updateRequest.getPhone();
     return this;
   }
