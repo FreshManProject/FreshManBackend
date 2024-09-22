@@ -21,6 +21,7 @@ public class OauthUserDto {
   private String name;
   private String email;
   private String address;
+  private String addressDetail;
   private String phoneNumber;
 
   public static OauthUserDto fromMember(Member member, String role) {
@@ -32,6 +33,7 @@ public class OauthUserDto {
                        .name(member.getName())
                        .email(member.getEmail())
                        .address(member.getAddress())
+                        .addressDetail(member.getAddressDetail())
                        .phoneNumber(member.getPhoneNumber())
                        .build();
   }
