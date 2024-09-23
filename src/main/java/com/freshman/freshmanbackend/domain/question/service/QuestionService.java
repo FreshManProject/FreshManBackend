@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
+  private static final String QUESTION_FOLDER = "question-image/";
   private final QuestionRepository questionRepository;
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
@@ -89,7 +90,7 @@ public class QuestionService {
     member.addQuestion(questionEntity);
     product.addQuestion(questionEntity);
     try {
-      String url = s3UploadService.saveFile(questionEntryRequest.getImage());
+      String url = s3UploadService.saveFile(questionEntryRequest.getImage(), QUESTION_FOLDER + questionEntity.getQuestionSeq());
       questionEntity.setImage(url);
     } catch (IOException e) {
       throw new ValidationException("s3.save_failed");
