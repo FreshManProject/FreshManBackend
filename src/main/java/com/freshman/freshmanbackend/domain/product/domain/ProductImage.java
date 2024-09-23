@@ -38,12 +38,6 @@ public class ProductImage extends BaseTimeEntity {
   @Column(name = "PRD_IMG_PATH", nullable = false)
   private String path;
   /**
-   * 상품 이미지 타입
-   */
-  @Convert(converter = ProductImageType.TypeCodeConverter.class)
-  @Column(name = "PRD_IMG_TYP", nullable = false)
-  private ProductImageType type;
-  /**
    * 순서
    */
   @Column(name = "PRD_IMG_ORD", nullable = false)
@@ -55,9 +49,8 @@ public class ProductImage extends BaseTimeEntity {
   @JoinColumn(name = "PRD_SEQ")
   private Product product;
 
-  public ProductImage(String path, ProductImageType type, Integer order) {
+  public ProductImage(String path, Integer order) {
     this.path = path;
-    this.type = type;
     this.order = order;
   }
 
