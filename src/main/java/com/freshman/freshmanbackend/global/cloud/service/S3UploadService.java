@@ -51,6 +51,25 @@ public class S3UploadService {
     return url;
   }
 
+  /**
+   * 폴더의 모든 파일 삭제
+   * @param prefix
+   */
+  public void deleteAllFilesUnderPath(String prefix) {
+    ObjectListing objectListing = amazonS3.listObjects(bucket, prefix);
+
+    while (true) {
+      for (S3ObjectSummary s3ObjectSummary : objectListing.getObjectSummaries()) {
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, s3ObjectSummary.getKey()));
+      }
+      if (objectListing.isTruncated()) {
+        objectListing = amazonS3.listNextBatchOfObjects(objectListing);
+      } else {
+        break;
+      }
+    }
+  }
+
   private String extractExtension(String originalFileName) {
     return originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
   }
