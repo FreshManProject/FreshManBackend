@@ -206,7 +206,7 @@ public class ProductController {
    * @return 요청 결과
    */
   @PostMapping
-  public ResponseEntity<?> doPost(@RequestBody ProductEntryRequest param) {
+  public ResponseEntity<?> doPost(@ModelAttribute ProductEntryRequest param) {
     ProductValidator.validate(param);
 
     productEntryService.entry(param);
@@ -276,7 +276,7 @@ public class ProductController {
    * @return 요청 결과
    */
   @PutMapping
-  public ResponseEntity<?> doPut(@RequestBody ProductModifyRequest param) {
+  public ResponseEntity<?> doPut(@ModelAttribute ProductModifyRequest param) {
     ProductValidator.validate(param);
 
     productModifyService.modify(param);
