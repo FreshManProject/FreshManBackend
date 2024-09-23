@@ -3,7 +3,6 @@ package com.freshman.freshmanbackend.domain.product.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.domain.ProductImage;
-import com.freshman.freshmanbackend.domain.product.domain.enums.ProductImageType;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -65,7 +64,6 @@ public class ProductDetailResponse {
     this.brand = product.getBrand();
     this.imageList = product.getImageList()
                             .stream()
-                            .filter(image -> image.getType().equals(ProductImageType.DETAIL))
                             .sorted(Comparator.comparing(ProductImage::getOrder))
                             .map(ProductImage::getPath)
                             .toList();

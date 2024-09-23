@@ -36,7 +36,7 @@ public class ProductListResponse {
    */
   private final String image;
 
-  public ProductListResponse(Long productSeq, String name, Long price, Long salePrice, String brand) {
+  public ProductListResponse(Long productSeq, String name, Long price, Long salePrice, String brand, String image) {
     this.productSeq = productSeq;
     this.name = name;
     this.price = price;
@@ -44,7 +44,7 @@ public class ProductListResponse {
       this.sale = new Sale(salePrice, (int) (((float) (price - salePrice) / price) * 100));
     }
     this.brand = brand;
-    this.image = "";
+    this.image = image;
   }
 
   @Getter
