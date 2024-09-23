@@ -20,6 +20,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 상품 엔티티
@@ -68,10 +69,13 @@ public class Product extends BaseTimeEntity {
    */
   @Column(name = "PRD_VLD", nullable = false)
   private Boolean valid = Boolean.TRUE;
+  @Column(name = "TMN_IMG")
+  @Setter
+  private String thumbnailImage;
   /**
    * 상품 이미지 목록
    */
-  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private final List<ProductImage> imageList = new ArrayList<>();
   /**
    * 상품 할인정보
@@ -102,6 +106,22 @@ public class Product extends BaseTimeEntity {
     }
 
     for (ProductImage image : addImageList) {
+      this.imageList.add(image);
+      image.setProduct(this);
+    }
+  }
+
+  /**
+   * 상품 이미지 목록 업데이트
+   * @param imageList
+   */
+  public void updateImageList(List<ProductImage> imageList){
+    this.imageList.clear();
+    if (imageList == null || imageList.isEmpty()) {
+      return;
+    }
+
+    for (ProductImage image : imageList) {
       this.imageList.add(image);
       image.setProduct(this);
     }
