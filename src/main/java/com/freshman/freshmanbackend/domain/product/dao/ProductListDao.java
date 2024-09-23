@@ -145,6 +145,6 @@ public class ProductListDao {
     QProduct product = QProduct.product;
     QProductSale sale = QProductSale.productSale;
     return Projections.constructor(ProductListResponse.class, product.productSeq, product.name, product.price,
-        sale.salePrice, product.brand);
+        sale.salePrice, product.brand, product.thumbnailImage);
   }
 }
