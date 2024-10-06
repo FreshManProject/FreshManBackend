@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class ProductListDao {
-
+  private static final int PAGE_SIZE = 10;
   private final JPAQueryFactory queryFactory;
 
   /**
@@ -47,6 +47,8 @@ public class ProductListDao {
                            sale.saleStartAt.loe(curTime).and(sale.saleEndAt.goe(curTime)))
                        .where(getCondition(param))
                        .orderBy(getOrder(param.getSort()))
+            .offset(PAGE_SIZE * param.getPage())
+            .limit(PAGE_SIZE)
                        .fetch();
   }
 
@@ -68,6 +70,8 @@ public class ProductListDao {
                            sale.saleStartAt.loe(curTime).and(sale.saleEndAt.goe(curTime)))
                        .where(getCondition(param))
                        .orderBy(getOrder(param.getSort()))
+            .offset(PAGE_SIZE * param.getPage())
+            .limit((PAGE_SIZE))
                        .fetch();
   }
 
