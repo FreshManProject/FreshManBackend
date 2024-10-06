@@ -30,4 +30,9 @@ public class ProductSearchRequest {
    * 정렬
    */
   private String sort;
+
+  /**
+   * 페이지
+   */
+  private Integer page;
 }
