@@ -4,7 +4,9 @@ import com.freshman.freshmanbackend.domain.cart.controller.validator.CartValidat
 import com.freshman.freshmanbackend.domain.cart.request.CartEntryRequest;
 import com.freshman.freshmanbackend.domain.cart.request.CartUpdateRequest;
 import com.freshman.freshmanbackend.domain.cart.response.CartInfoResponse;
+import com.freshman.freshmanbackend.domain.cart.response.CartListResponse;
 import com.freshman.freshmanbackend.domain.cart.service.CartService;
+import com.freshman.freshmanbackend.global.common.response.DataResponse;
 import com.freshman.freshmanbackend.global.common.response.ListResponse;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
 
@@ -39,8 +41,8 @@ public class CartController {
 
   @GetMapping
   public ResponseEntity<?> get(@RequestParam("page") int page) {
-    List<CartInfoResponse> cartInfoResponses = cartService.getUserCartsList(page);
-    return ResponseEntity.ok(new ListResponse(cartInfoResponses));
+    CartListResponse cartList = cartService.getUserCartsList(page);
+    return ResponseEntity.ok(new DataResponse(cartList));
   }
 
   @PutMapping("/{cartId}")

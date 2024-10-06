@@ -7,6 +7,7 @@ import com.freshman.freshmanbackend.domain.cart.repository.CartRepository;
 import com.freshman.freshmanbackend.domain.cart.request.CartEntryRequest;
 import com.freshman.freshmanbackend.domain.cart.request.CartUpdateRequest;
 import com.freshman.freshmanbackend.domain.cart.response.CartInfoResponse;
+import com.freshman.freshmanbackend.domain.cart.response.CartListResponse;
 import com.freshman.freshmanbackend.domain.member.domain.Member;
 import com.freshman.freshmanbackend.domain.member.repository.MemberRepository;
 import com.freshman.freshmanbackend.domain.product.domain.Product;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CartService {
+  private static final Integer PAGE_SIZE = 10;
   private final CartRepository cartRepository;
   private final ProductRepository productRepository;
   private final MemberRepository memberRepository;
@@ -64,12 +66,12 @@ public class CartService {
   }
 
   @Transactional(readOnly = true)
-  public List<CartInfoResponse> getUserCartsList(int page) {
+  public CartListResponse getUserCartsList(int page) {
     Long currentMemberSeq = AuthMemberUtils.getMemberSeq();
-    PageRequest pageRequest = PageRequest.of(page, 10);
+    PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
     Page<Cart> carts = cartRepository.findPageByMember_MemberSeq(currentMemberSeq,pageRequest);
-//    List<Cart> carts = cartListDao.getByMemberSeq(currentMemberSeq);
-    return carts.stream().map(CartInfoResponse::fromCart).collect(Collectors.toList());
+    List<CartInfoResponse> cartInfos = carts.stream().map(CartInfoResponse::fromCart).collect(Collectors.toList());
+    return new CartListResponse(carts.getTotalElements(), cartInfos);
   }
 
   @Transactional
