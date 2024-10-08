@@ -70,7 +70,7 @@ public class SecurityConfig {
         .addFilterBefore(new JwtFilter(jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new JwtLogoutFilter(jwtUtil, redisRefreshTokenService), LogoutFilter.class)
         .authorizeHttpRequests(
-            (auth) -> auth.requestMatchers("/reissue", "/products/**").permitAll().anyRequest().authenticated())
+            (auth) -> auth.requestMatchers("/reissue", "/products/**", "/admin/login").permitAll().anyRequest().authenticated())
         .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     return http.build();
   }
