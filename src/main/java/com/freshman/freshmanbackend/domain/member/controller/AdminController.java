@@ -7,6 +7,7 @@ import com.freshman.freshmanbackend.global.common.response.DataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class AdminController {
      * @return 액세스 토큰, 리프레시 토큰
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(AdminLoginRequest adminLoginRequest){
+    public ResponseEntity<?> login(@RequestBody AdminLoginRequest adminLoginRequest){
         AdminLoginResponse tokens = adminService.login(adminLoginRequest);
         return ResponseEntity.ok(new DataResponse(tokens));
     }

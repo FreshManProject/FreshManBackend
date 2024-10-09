@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Admin {
     @Id
     @Column(name = "ADM_SEQ")
-    private Long id;
+    private Long adminSeq;
     @Column(name = "ADM_PWD")
     private String password;
 }
