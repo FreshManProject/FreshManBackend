@@ -7,7 +7,7 @@ import java.util.Collection;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class NoOffsetPageResponse {
+public class NoOffsetPageResponse extends SuccessResponse{
     private final Collection<?> list;
     private final int count;
     private final Boolean isEnd;
