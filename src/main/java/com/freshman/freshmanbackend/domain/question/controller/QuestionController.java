@@ -6,6 +6,7 @@ import com.freshman.freshmanbackend.domain.question.response.MyQuestionResponse;
 import com.freshman.freshmanbackend.domain.question.response.ProductQuestionResponse;
 import com.freshman.freshmanbackend.domain.question.service.QuestionService;
 import com.freshman.freshmanbackend.global.common.response.ListResponse;
+import com.freshman.freshmanbackend.global.common.response.NoOffsetPageResponse;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
 
 import org.springframework.http.ResponseEntity;
@@ -64,8 +65,8 @@ public class QuestionController {
    */
   @GetMapping("/my-questions")
   public ResponseEntity<?> getMyQuestions(@RequestParam int page) {
-    List<MyQuestionResponse> myQuestion = questionService.getMyQuestion(page);
-    return ResponseEntity.ok(new ListResponse(myQuestion));
+    NoOffsetPageResponse myQuestion = questionService.getMyQuestion(page);
+    return ResponseEntity.ok(myQuestion);
   }
 
   /**
@@ -75,7 +76,7 @@ public class QuestionController {
    */
   @GetMapping("/products/{productSeq}")
   public ResponseEntity<?> getProductQuestion(@PathVariable Long productSeq, @RequestParam int page) {
-    List<ProductQuestionResponse> productQuestions = questionService.getProductQuestion(productSeq, page);
-    return ResponseEntity.ok(new ListResponse(productQuestions));
+    NoOffsetPageResponse productQuestion = questionService.getProductQuestion(productSeq, page);
+    return ResponseEntity.ok(productQuestion);
   }
 }

@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.global.auth.util.AuthMemberUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,16 +26,5 @@ public class ProductQuestionResponse {
   private String content;
   private String image;
   private Boolean isAnswered;
-  private LocalDate postedDate;
-
-  public static ProductQuestionResponse fromQuestion(Question question) {
-    return ProductQuestionResponse.builder()
-                                  .questionSeq(question.getQuestionSeq())
-                                  .memberName(AuthMemberUtils.getOauthUserDto().getName())
-                                  .content(question.getContent())
-                                  .image(question.getImage())
-                                  .isAnswered(question.getIsAnswered())
-                                  .postedDate(question.getCreatedAt().toLocalDate())
-                                  .build();
-  }
+  private LocalDateTime postedDate;
 }
