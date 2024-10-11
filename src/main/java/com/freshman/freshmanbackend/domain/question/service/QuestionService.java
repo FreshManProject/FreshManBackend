@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.member.domain.Member;
 import com.freshman.freshmanbackend.domain.member.repository.MemberRepository;
 import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.repository.ProductRepository;
+import com.freshman.freshmanbackend.domain.question.dao.QuestionDao;
 import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.domain.question.repository.QuestionRepository;
 import com.freshman.freshmanbackend.domain.question.request.QuestionEntryRequest;
@@ -13,6 +14,7 @@ import com.freshman.freshmanbackend.global.auth.util.AuthMemberUtils;
 import com.freshman.freshmanbackend.global.cloud.service.S3UploadService;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
+import com.freshman.freshmanbackend.global.common.response.NoOffsetPageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,11 +33,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
+  private static final int PAGE_SIZE = 10;
   private static final String QUESTION_FOLDER = "question-image/";
   private final QuestionRepository questionRepository;
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
   private final S3UploadService s3UploadService;
+  private final QuestionDao questionDao;
 
   /**
    * 문의 삭제
@@ -52,12 +57,26 @@ public class QuestionService {
     questionRepository.deleteById(questionSeq);
   }
 
+  /**
+   * 내 문의 가져오기
+   * @param page
+   * @return
+   */
   @Transactional(readOnly = true)
-  public List<MyQuestionResponse> getMyQuestion(int page) {
+  public NoOffsetPageResponse getMyQuestion(int page) {
+    Boolean isEnd = false;
+    String name = AuthMemberUtils.getOauthUserDto().getName();
     Long memberSeq = AuthMemberUtils.getMemberSeq();
-    PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-    Page<Question> questions = questionRepository.findByMember_MemberSeq(memberSeq, pageRequest);
-    return questions.getContent().stream().map(MyQuestionResponse::of).toList();
+
+    List<MyQuestionResponse> myQuestion = questionDao.getMyQuestion(memberSeq, PAGE_SIZE, page);
+    if (myQuestion.size() != PAGE_SIZE + 1){
+      isEnd = true;
+    }
+    else{
+      myQuestion.remove(PAGE_SIZE);
+    }
+    myQuestion.stream().forEach(qustion -> qustion.setMemberName(name));
+    return new NoOffsetPageResponse(myQuestion, isEnd);
   }
 
   /**
@@ -68,10 +87,16 @@ public class QuestionService {
    * @return 페이지에 해당하는 문의 리스트
    */
   @Transactional(readOnly = true)
-  public List<ProductQuestionResponse> getProductQuestion(Long productSeq, int page) {
-    PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-    Page<Question> questions = questionRepository.findByProduct_ProductSeq(productSeq, pageRequest);
-    return questions.getContent().stream().map(ProductQuestionResponse::fromQuestion).toList();
+  public NoOffsetPageResponse getProductQuestion(Long productSeq, int page) {
+    Boolean isEnd = false;
+    List<ProductQuestionResponse> productQuestion = questionDao.getProductQuestion(productSeq, PAGE_SIZE, page);
+    if (productQuestion.size() != PAGE_SIZE + 1) {
+      isEnd = true;
+    }
+    else{
+      productQuestion.remove(PAGE_SIZE);
+    }
+    return new NoOffsetPageResponse(productQuestion, isEnd);
   }
 
   /**
