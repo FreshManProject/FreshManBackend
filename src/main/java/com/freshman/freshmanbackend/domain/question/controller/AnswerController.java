@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.question.controller.validator.AnswerV
 import com.freshman.freshmanbackend.domain.question.request.AnswerEntryRequest;
 import com.freshman.freshmanbackend.domain.question.response.AnswerResponse;
 import com.freshman.freshmanbackend.domain.question.service.AnswerService;
+import com.freshman.freshmanbackend.global.common.response.DataResponse;
 import com.freshman.freshmanbackend.global.common.response.SuccessResponse;
 
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class AnswerController {
   @GetMapping("/{questionSeq}")
   public ResponseEntity<?> get(@PathVariable(name = "questionSeq") Long questionSeq) {
     AnswerResponse answer = answerService.getByQuestionSeq(questionSeq);
-    return ResponseEntity.ok(answer);
+    return ResponseEntity.ok(new DataResponse(answer));
   }
 
   @PostMapping("/{questionSeq}")
