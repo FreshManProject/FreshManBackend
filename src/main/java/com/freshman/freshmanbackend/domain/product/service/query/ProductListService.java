@@ -6,6 +6,7 @@ import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
 import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
 
+import com.freshman.freshmanbackend.global.common.response.NoOffsetPageResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProductListService {
+  private static final int PAGE_SIZE = 10;
 
   private final ProductListDao productListDao;
 
@@ -33,8 +35,14 @@ public class ProductListService {
    * @return 상품 목록
    */
   @Transactional(readOnly = true)
-  public List<ProductListResponse> getList(ProductListRequest param) {
-    return productListDao.select(param);
+  public NoOffsetPageResponse getList(ProductListRequest param) {
+    Boolean isEnd = true;
+    List<ProductListResponse> products = productListDao.select(param);
+    if (products.size() == PAGE_SIZE + 1){
+      products.remove(PAGE_SIZE);
+      isEnd = false;
+    }
+    return new NoOffsetPageResponse(products, isEnd);
   }
 
   /**
@@ -44,9 +52,15 @@ public class ProductListService {
    * @return 상품 목록
    */
   @Transactional(readOnly = true)
-  public List<ProductListResponse> getList(ProductSearchRequest param) {
+  public NoOffsetPageResponse getList(ProductSearchRequest param) {
+    Boolean isEnd = true;
     // 최근 검색어 등록
     searchLogService.entry(param.getKeyword());
-    return productListDao.select(param);
+    List<ProductListResponse> products = productListDao.select(param);
+    if (products.size() == PAGE_SIZE + 1){
+      products.remove(PAGE_SIZE);
+      isEnd = false;
+    }
+    return new NoOffsetPageResponse(products, isEnd);
   }
 }

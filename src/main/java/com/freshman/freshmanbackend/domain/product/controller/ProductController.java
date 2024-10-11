@@ -172,8 +172,7 @@ public class ProductController {
   @GetMapping
   public ResponseEntity<?> doGetList(@ModelAttribute ProductListRequest param) {
     ProductValidator.validate(param);
-
-    return ResponseEntity.ok(new ListResponse(productListService.getList(param)));
+    return ResponseEntity.ok(productListService.getList(param));
   }
 
   /**
@@ -186,7 +185,7 @@ public class ProductController {
   public ResponseEntity<?> doGetSearch(@ModelAttribute ProductSearchRequest param) {
     ProductValidator.validate(param);
 
-    return ResponseEntity.ok(new ListResponse(productListService.getList(param)));
+    return ResponseEntity.ok(productListService.getList(param));
   }
 
   /**

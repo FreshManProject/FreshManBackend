@@ -48,7 +48,7 @@ public class ProductListDao {
                        .where(getCondition(param))
                        .orderBy(getOrder(param.getSort()))
             .offset(PAGE_SIZE * param.getPage())
-            .limit(PAGE_SIZE)
+            .limit(PAGE_SIZE + 1)
                        .fetch();
   }
 
@@ -71,7 +71,7 @@ public class ProductListDao {
                        .where(getCondition(param))
                        .orderBy(getOrder(param.getSort()))
             .offset(PAGE_SIZE * param.getPage())
-            .limit((PAGE_SIZE))
+            .limit((PAGE_SIZE) + 1)
                        .fetch();
   }
 
