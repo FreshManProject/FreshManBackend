@@ -63,4 +63,15 @@ public class ProductListService {
     }
     return new NoOffsetPageResponse(products, isEnd);
   }
+
+  @Transactional(readOnly = true)
+  public NoOffsetPageResponse getAllList(int page){
+    Boolean isEnd = true;
+    List<ProductListResponse> products = productListDao.selectAll(page);
+    if (products.size() == PAGE_SIZE + 1){
+      products.remove(PAGE_SIZE);
+      isEnd = false;
+    }
+    return new NoOffsetPageResponse(products, isEnd);
+  }
 }

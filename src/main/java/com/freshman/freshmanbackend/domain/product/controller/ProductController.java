@@ -371,4 +371,10 @@ public class ProductController {
     productModifyService.modify(param);
     return ResponseEntity.ok(new SuccessResponse());
   }
+
+  @GetMapping("/all")
+  public ResponseEntity<?> doGeAllProducts(@RequestParam("page") int page){
+    NoOffsetPageResponse allList = productListService.getAllList(page);
+    return ResponseEntity.ok(allList);
+  }
 }

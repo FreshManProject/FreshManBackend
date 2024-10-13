@@ -29,6 +29,22 @@ public class ProductListDao {
   private static final int PAGE_SIZE = 10;
   private final JPAQueryFactory queryFactory;
 
+  public List<ProductListResponse> selectAll(int page){
+    QProduct product = QProduct.product;
+    QProductSale sale = QProductSale.productSale;
+    LocalDateTime curTime = LocalDateTime.now();
+
+
+    return queryFactory.select(getProjection())
+            .from(product)
+            .leftJoin(sale)
+            .on(sale.productSeq.eq(product.productSeq),
+                    sale.saleStartAt.loe(curTime).and(sale.saleEndAt.goe(curTime)))
+            .offset(PAGE_SIZE * page)
+            .limit((PAGE_SIZE) + 1)
+            .fetch();
+  }
+
   /**
    * 상품 목록 조회
    *
