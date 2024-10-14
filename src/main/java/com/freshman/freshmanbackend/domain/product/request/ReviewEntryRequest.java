@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.domain.product.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 후기 등록 요청
@@ -22,4 +23,9 @@ public class ReviewEntryRequest {
    * 별점
    */
   private Byte score;
+
+  /**
+   * 이미지
+   */
+  private MultipartFile image;
 }
