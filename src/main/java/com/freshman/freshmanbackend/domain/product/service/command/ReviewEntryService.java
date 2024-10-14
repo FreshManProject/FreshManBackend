@@ -9,12 +9,15 @@ import com.freshman.freshmanbackend.domain.product.request.ReviewCommentEntryReq
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
 import com.freshman.freshmanbackend.domain.product.service.query.ReviewOneService;
+import com.freshman.freshmanbackend.global.cloud.service.S3UploadService;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
 
 /**
  * 후기 등록 서비스
@@ -24,12 +27,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ReviewEntryService {
-
+  private static final String REVIEW_FOLDER = "review-image/";
   private final ReviewRepository reviewRepository;
   private final ReviewCommentRepository commentRepository;
-
   private final ProductOneService productOneService;
   private final ReviewOneService reviewOneService;
+  private final S3UploadService s3UploadService;
 
   /**
    * 후기 등록
@@ -40,9 +43,14 @@ public class ReviewEntryService {
   public void entry(ReviewEntryRequest param) {
     // 상품 조회
     Product product = productOneService.getOne(param.getProductSeq(), Boolean.TRUE);
-
-    // 후기 등록 TODO - 추후에 이미지 추가
-    reviewRepository.save(new Review(param.getContent(), param.getScore(), null, product));
+    Review review = reviewRepository.save(new Review(param.getContent(), param.getScore(), null, product));
+    // 후기 등록
+    try {
+      String path = s3UploadService.saveFile(param.getImage(), REVIEW_FOLDER + review.getReviewSeq());
+      review.registerImage(path);
+    } catch (IOException e) {
+      throw new ValidationException("s3.save_failed");
+    }
   }
 
   /**
