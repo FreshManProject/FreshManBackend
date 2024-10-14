@@ -2,6 +2,7 @@ package com.freshman.freshmanbackend.domain.product.domain;
 
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -85,6 +86,10 @@ public class Review extends BaseTimeEntity {
     this.score = score;
     this.imagePath = imagePath;
     this.product = product;
+  }
+
+  public void registerImage(String imagePath){
+    this.imagePath = imagePath;
   }
 
   /**
