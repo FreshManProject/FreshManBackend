@@ -233,7 +233,7 @@ public class ProductController {
    * @return 요청 결과
    */
   @PostMapping("/reviews")
-  public ResponseEntity<?> doPostReview(@RequestBody ReviewEntryRequest param) {
+  public ResponseEntity<?> doPostReview(@ModelAttribute ReviewEntryRequest param) {
     ProductValidator.validate(param);
 
     reviewEntryService.entry(param);
