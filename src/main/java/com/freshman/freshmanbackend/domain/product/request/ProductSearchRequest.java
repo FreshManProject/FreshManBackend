@@ -34,5 +34,5 @@ public class ProductSearchRequest {
   /**
    * 페이지
    */
-  private Integer page;
+  private Integer page = 0;
 }
