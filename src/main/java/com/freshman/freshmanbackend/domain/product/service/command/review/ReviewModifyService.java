@@ -1,10 +1,10 @@
-package com.freshman.freshmanbackend.domain.product.service.command;
+package com.freshman.freshmanbackend.domain.product.service.command.review;
 
 import com.freshman.freshmanbackend.domain.product.domain.Review;
 import com.freshman.freshmanbackend.domain.product.domain.ReviewComment;
 import com.freshman.freshmanbackend.domain.product.request.ReviewCommentModifyRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewModifyRequest;
-import com.freshman.freshmanbackend.domain.product.service.query.ReviewOneService;
+import com.freshman.freshmanbackend.domain.product.service.query.review.ReviewOneService;
 import com.freshman.freshmanbackend.global.auth.util.AuthMemberUtils;
 import com.freshman.freshmanbackend.global.cloud.service.S3UploadService;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
