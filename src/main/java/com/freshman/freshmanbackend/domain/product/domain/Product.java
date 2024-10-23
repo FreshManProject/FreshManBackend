@@ -2,10 +2,6 @@ package com.freshman.freshmanbackend.domain.product.domain;
 
 import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +14,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,137 +29,166 @@ import lombok.Setter;
 @Table(name = "PRODUCT")
 public class Product extends BaseTimeEntity {
 
-  /**
-   * 상품 일련번호
-   */
-  @Id
-  @Column(name = "PRD_SEQ", nullable = false)
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long productSeq;
-  /**
-   * 상품명
-   */
-  @Column(name = "PRD_NM", nullable = false)
-  private String name;
-  /**
-   * 가격
-   */
-  @Column(name = "PRD_PRC", nullable = false)
-  private Long price;
-  /**
-   * 설명
-   */
-  @Column(name = "PRD_DESC", nullable = false)
-  private String description;
-  /**
-   * 브랜드명
-   */
-  @Column(name = "PRD_BRND", nullable = false)
-  private String brand;
-  /**
-   * 상품 카테고리
-   */
-  @ManyToOne
-  @JoinColumn(name = "PRD_CTG_SEQ")
-  private ProductCategory category;
-  /**
-   * 유효여부
-   */
-  @Column(name = "PRD_VLD", nullable = false)
-  private Boolean valid = Boolean.TRUE;
-  @Column(name = "TMN_IMG")
-  @Setter
-  private String thumbnailImage;
-  /**
-   * 상품 이미지 목록
-   */
-  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  private final List<ProductImage> imageList = new ArrayList<>();
-  /**
-   * 상품 할인정보
-   */
-  @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  private ProductSale sale;
+    /**
+     * 상품 이미지 목록
+     */
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST,
+            CascadeType.MERGE})
+    private final List<ProductImage> imageList = new ArrayList<>();
+    /**
+     * 상품 일련번호
+     */
+    @Id
+    @Column(name = "PRD_SEQ", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productSeq;
+    /**
+     * 상품명
+     */
+    @Column(name = "PRD_NM", nullable = false)
+    private String name;
+    /**
+     * 가격
+     */
+    @Column(name = "PRD_PRC", nullable = false)
+    private Long price;
+    /**
+     * 설명
+     */
+    @Column(name = "PRD_DESC", nullable = false)
+    private String description;
+    /**
+     * 브랜드명
+     */
+    @Column(name = "PRD_BRND", nullable = false)
+    private String brand;
+    /**
+     * 상품 카테고리
+     */
+    @ManyToOne
+    @JoinColumn(name = "PRD_CTG_SEQ")
+    private ProductCategory category;
+    /**
+     * 유효여부
+     */
+    @Column(name = "PRD_VLD", nullable = false)
+    private Boolean valid = Boolean.TRUE;
+    /**
+     * 썸네일 이미지
+     */
+    @Column(name = "TMN_IMG")
+    @Setter
+    private String thumbnailImage;
+    /**
+     * 좋아요 개수
+     */
+    @Column(name = "PRD_LIK_CNT")
+    private Integer likeCount;
+    /**
+     * 상품 할인정보
+     */
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private ProductSale sale;
 
-  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-  private List<Question> questionList = new ArrayList<>();
+    /**
+     * 질문 리스트
+     */
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST,
+            CascadeType.MERGE})
+    private List<Question> questionList = new ArrayList<>();
 
-  public Product(String name, Long price, String description, String brand, ProductCategory category) {
-    this.name = name;
-    this.price = price;
-    this.description = description;
-    this.brand = brand;
-    this.category = category;
-  }
-
-  /**
-   * 상품 이미지 목록 추가
-   *
-   * @param addImageList 이미지 목록
-   */
-  public void addImageList(List<ProductImage> addImageList) {
-    if (addImageList == null || addImageList.isEmpty()) {
-      return;
+    public Product(String name, Long price, String description, String brand, ProductCategory category) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.brand = brand;
+        this.category = category;
+        this.likeCount = 0;
     }
 
-    for (ProductImage image : addImageList) {
-      this.imageList.add(image);
-      image.setProduct(this);
+    /**
+     * 상품 이미지 목록 추가
+     *
+     * @param addImageList 이미지 목록
+     */
+    public void addImageList(List<ProductImage> addImageList) {
+        if (addImageList == null || addImageList.isEmpty()) {
+            return;
+        }
+
+        for (ProductImage image : addImageList) {
+            this.imageList.add(image);
+            image.setProduct(this);
+        }
     }
-  }
 
-  /**
-   * 상품 이미지 목록 업데이트
-   * @param imageList
-   */
-  public void updateImageList(List<ProductImage> imageList){
-    this.imageList.clear();
-    if (imageList == null || imageList.isEmpty()) {
-      return;
+    /**
+     * 상품 이미지 목록 업데이트
+     *
+     * @param imageList
+     */
+    public void updateImageList(List<ProductImage> imageList) {
+        this.imageList.clear();
+        if (imageList == null || imageList.isEmpty()) {
+            return;
+        }
+
+        for (ProductImage image : imageList) {
+            this.imageList.add(image);
+            image.setProduct(this);
+        }
     }
 
-    for (ProductImage image : imageList) {
-      this.imageList.add(image);
-      image.setProduct(this);
+    public void addQuestion(Question question) {
+        this.questionList.add(question);
+        question.setProduct(this);
     }
-  }
 
-  public void addQuestion(Question question) {
-    this.questionList.add(question);
-    question.setProduct(this);
-  }
+    /**
+     * 상품 할인정보 등록
+     */
+    public void addSale(ProductSale sale) {
+        this.sale = sale;
+        sale.setProduct(this);
+    }
 
-  /**
-   * 상품 할인정보 등록
-   */
-  public void addSale(ProductSale sale) {
-    this.sale = sale;
-    sale.setProduct(this);
-  }
+    /**
+     * 상품 삭제
+     */
+    public void delete() {
+        this.valid = Boolean.FALSE;
+    }
 
-  /**
-   * 상품 삭제
-   */
-  public void delete() {
-    this.valid = Boolean.FALSE;
-  }
+    /**
+     * 상품 할인정보 삭제
+     */
+    public void deleteSale() {
+        this.sale = null;
+    }
 
-  /**
-   * 상품 할인정보 삭제
-   */
-  public void deleteSale() {
-    this.sale = null;
-  }
+    /**
+     * 상품 정보 수정
+     */
+    public void update(String name, Long price, String description, String brand, ProductCategory category) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.brand = brand;
+        this.category = category;
+    }
 
-  /**
-   * 상품 정보 수정
-   */
-  public void update(String name, Long price, String description, String brand, ProductCategory category) {
-    this.name = name;
-    this.price = price;
-    this.description = description;
-    this.brand = brand;
-    this.category = category;
-  }
+    /**
+     * 좋아요 증가
+     */
+    public void increaseLikes() {
+        likeCount++;
+    }
+
+    /**
+     * 좋아요 감소
+     */
+    public void decreaseLikes() {
+        likeCount--;
+    }
 }
