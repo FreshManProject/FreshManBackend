@@ -13,19 +13,20 @@ import com.freshman.freshmanbackend.domain.product.request.ReviewCommentModifyRe
 import com.freshman.freshmanbackend.domain.product.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.request.ReviewModifyRequest;
 import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
-import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryDeleteService;
-import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryEntryService;
-import com.freshman.freshmanbackend.domain.product.service.command.ProductCategoryModifyService;
-import com.freshman.freshmanbackend.domain.product.service.command.ProductDeleteService;
-import com.freshman.freshmanbackend.domain.product.service.command.ProductEntryService;
-import com.freshman.freshmanbackend.domain.product.service.command.ProductModifyService;
-import com.freshman.freshmanbackend.domain.product.service.command.ReviewDeleteService;
-import com.freshman.freshmanbackend.domain.product.service.command.ReviewEntryService;
-import com.freshman.freshmanbackend.domain.product.service.command.ReviewModifyService;
-import com.freshman.freshmanbackend.domain.product.service.query.ProductCategoryListService;
-import com.freshman.freshmanbackend.domain.product.service.query.ProductListService;
-import com.freshman.freshmanbackend.domain.product.service.query.ProductOneService;
-import com.freshman.freshmanbackend.domain.product.service.query.ReviewListService;
+import com.freshman.freshmanbackend.domain.product.service.command.category.ProductCategoryDeleteService;
+import com.freshman.freshmanbackend.domain.product.service.command.category.ProductCategoryEntryService;
+import com.freshman.freshmanbackend.domain.product.service.command.category.ProductCategoryModifyService;
+import com.freshman.freshmanbackend.domain.product.service.command.like.ProductLikeService;
+import com.freshman.freshmanbackend.domain.product.service.command.product.ProductDeleteService;
+import com.freshman.freshmanbackend.domain.product.service.command.product.ProductEntryService;
+import com.freshman.freshmanbackend.domain.product.service.command.product.ProductModifyService;
+import com.freshman.freshmanbackend.domain.product.service.command.review.ReviewDeleteService;
+import com.freshman.freshmanbackend.domain.product.service.command.review.ReviewEntryService;
+import com.freshman.freshmanbackend.domain.product.service.command.review.ReviewModifyService;
+import com.freshman.freshmanbackend.domain.product.service.query.category.ProductCategoryListService;
+import com.freshman.freshmanbackend.domain.product.service.query.product.ProductListService;
+import com.freshman.freshmanbackend.domain.product.service.query.product.ProductOneService;
+import com.freshman.freshmanbackend.domain.product.service.query.review.ReviewListService;
 import com.freshman.freshmanbackend.global.common.response.DataResponse;
 import com.freshman.freshmanbackend.global.common.response.ListResponse;
 import com.freshman.freshmanbackend.global.common.response.NoOffsetPageResponse;
@@ -68,6 +69,7 @@ public class ProductController {
 
     private final SearchLogService searchLogService;
     private final ReviewListService reviewListService;
+    private final ProductLikeService productLikeService;
 
     /**
      * 상품 삭제
@@ -347,6 +349,18 @@ public class ProductController {
         ProductValidator.validate(param);
 
         reviewModifyService.modify(param);
+        return ResponseEntity.ok(new SuccessResponse());
+    }
+
+    /**
+     * 좋아요 누르기
+     *
+     * @param productSeq
+     * @return
+     */
+    @PostMapping("/likes/{productSeq}")
+    public ResponseEntity<?> doPushLike(@PathVariable("productSeq") Long productSeq) {
+        productLikeService.pushLike(productSeq);
         return ResponseEntity.ok(new SuccessResponse());
     }
 
