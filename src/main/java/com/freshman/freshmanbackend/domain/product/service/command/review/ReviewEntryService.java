@@ -38,8 +38,11 @@ public class ReviewEntryService {
     public void entry(ReviewEntryRequest param) {
         // 상품 조회
         Product product = productOneService.getOne(param.getProductSeq(), Boolean.TRUE);
-        Review review = reviewRepository.save(new Review(param.getContent(), param.getScore(), null, product));
         // 후기 등록
+        Review review = reviewRepository.save(new Review(param.getContent(), param.getScore(), null, product));
+        if (param.getImage() == null) {
+            return;
+        }
         try {
             String path = s3UploadService.saveFile(param.getImage(), REVIEW_FOLDER + review.getReviewSeq());
             review.registerImage(path);
