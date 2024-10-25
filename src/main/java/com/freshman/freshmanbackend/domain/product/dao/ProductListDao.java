@@ -13,6 +13,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -60,7 +61,6 @@ public class ProductListDao {
                 .from(product)
                 .where(getCondition(param))
                 .orderBy(getOrder(param.getSort()))
-                .offset(PAGE_SIZE * param.getPage())
                 .limit(PAGE_SIZE + 1)
                 .fetch();
     }
@@ -127,11 +127,41 @@ public class ProductListDao {
         // 카테고리
         booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));
 
-        // 낮은 가격
+        //최신순 NoOffset 조건
+        if (StringUtils.isBlank(param.getSort())) {
+            System.out.println(param.getNextSeq());
+            if (param.getNextSeq() != null) {
+                booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
+            }
+        }
+
+        //최신순 NoOffset 조건
+        if (StringUtils.equals(param.getSort(), ProductSortType.NEWEST.getCode())) {
+            if (param.getNextSeq() != null) {
+                booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
+            }
+        } else if (StringUtils.equals(param.getSort(), ProductSortType.HIGHEST.getCode())) {//높은 가격 NoOffset 조건
+            if (param.getNextPrice() != null) {
+                booleanBuilder.and(product.price.loe(param.getNextPrice()));
+            }
+            if (param.getNextSeq() != null) {
+                booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
+            }
+        } else if (StringUtils.equals(param.getSort(), ProductSortType.LOWEST.getCode())) {//낮은 가격 순 NoOffset 조건
+            if (param.getNextPrice() != null) {
+                booleanBuilder.and(product.price.goe(param.getNextPrice()));
+            }
+            if (param.getNextSeq() != null) {
+                booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
+            }
+        }
+
+        // 낮은 가격 제한
         if (param.getLowPrice() != null) {
             booleanBuilder.and(product.price.goe(param.getLowPrice()));
         }
-        // 높은 가격
+
+        // 높은 가격 제한
         if (param.getHighPrice() != null) {
             booleanBuilder.and(product.price.loe(param.getHighPrice()));
         }
@@ -169,19 +199,26 @@ public class ProductListDao {
         return booleanBuilder;
     }
 
-    private OrderSpecifier<?> getOrder(String sort) {
+    private OrderSpecifier[] getOrder(String sort) {
         QProduct product = QProduct.product;
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
 
         if (StringUtils.isBlank(sort)) {
-            return product.createdAt.desc();
+            orderSpecifiers.add(product.productSeq.desc());
+            return orderSpecifiers.toArray(OrderSpecifier[]::new);
         }
 
         if (StringUtils.equals(sort, ProductSortType.NEWEST.getCode())) {
-            return product.createdAt.desc();
+            orderSpecifiers.add(product.productSeq.desc());
+            return orderSpecifiers.toArray(OrderSpecifier[]::new);
         } else if (StringUtils.equals(sort, ProductSortType.HIGHEST.getCode())) {
-            return product.price.desc();
-        } else {
-            return product.price.asc();
+            orderSpecifiers.add(product.price.desc());
+            orderSpecifiers.add(product.productSeq.desc());
+            return orderSpecifiers.toArray(OrderSpecifier[]::new);
+        } else {//낮은 가격순
+            orderSpecifiers.add(product.price.asc());
+            orderSpecifiers.add(product.productSeq.desc());
+            return orderSpecifiers.toArray(OrderSpecifier[]::new);
         }
     }
 
