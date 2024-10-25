@@ -1,8 +1,8 @@
 package com.freshman.freshmanbackend.domain.product.service.command.category;
 
 import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
+import com.freshman.freshmanbackend.domain.product.dto.request.ProductCategoryEntryRequest;
 import com.freshman.freshmanbackend.domain.product.repository.ProductCategoryRepository;
-import com.freshman.freshmanbackend.domain.product.request.ProductCategoryEntryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,8 +1,8 @@
 package com.freshman.freshmanbackend.domain.product.service.query.category;
 
 import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
+import com.freshman.freshmanbackend.domain.product.dto.response.ProductCategoryListResponse;
 import com.freshman.freshmanbackend.domain.product.repository.ProductCategoryRepository;
-import com.freshman.freshmanbackend.domain.product.response.ProductCategoryListResponse;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

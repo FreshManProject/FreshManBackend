@@ -1,12 +1,10 @@
-package com.freshman.freshmanbackend.domain.product.response;
+package com.freshman.freshmanbackend.domain.product.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * 후기 댓글 응답

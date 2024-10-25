@@ -2,24 +2,17 @@ package com.freshman.freshmanbackend.domain.product.dao;
 
 
 import com.freshman.freshmanbackend.domain.member.domain.QMember;
-import com.freshman.freshmanbackend.domain.product.domain.QProduct;
-import com.freshman.freshmanbackend.domain.product.domain.QProductSale;
 import com.freshman.freshmanbackend.domain.product.domain.QReview;
-import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
 import com.freshman.freshmanbackend.domain.product.domain.enums.ReviewSortType;
-import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
-import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
-import com.freshman.freshmanbackend.domain.product.response.ProductReviewResponse;
+import com.freshman.freshmanbackend.domain.product.dto.response.ProductReviewResponse;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 후기 리스트 Dao
@@ -31,13 +24,14 @@ public class ReviewListDao {
 
     /**
      * 후기 리스트 가져오기
+     *
      * @param page
      * @param pageSize
      * @param productSeq
      * @param sort
      * @return 후기 리스트
      */
-    public List<ProductReviewResponse> selectPage(int page, int pageSize,Long productSeq ,String sort) {
+    public List<ProductReviewResponse> selectPage(int page, int pageSize, Long productSeq, String sort) {
         QMember member = QMember.member;
         QReview review = QReview.review;
 
@@ -69,6 +63,7 @@ public class ReviewListDao {
     private ConstructorExpression<ProductReviewResponse> getProjection() {
         QMember member = QMember.member;
         QReview review = QReview.review;
-        return Projections.constructor(ProductReviewResponse.class, review.reviewSeq, member.name, review.content, review.score, review.imagePath, review.createdAt);
+        return Projections.constructor(ProductReviewResponse.class, review.reviewSeq, member.name, review.content,
+                review.score, review.imagePath, review.createdAt);
     }
 }

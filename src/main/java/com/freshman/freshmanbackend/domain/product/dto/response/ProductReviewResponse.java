@@ -1,15 +1,9 @@
-package com.freshman.freshmanbackend.domain.product.response;
+package com.freshman.freshmanbackend.domain.product.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.freshman.freshmanbackend.domain.product.domain.Review;
-import com.freshman.freshmanbackend.domain.product.repository.ReviewRepository;
-import jakarta.persistence.Column;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter

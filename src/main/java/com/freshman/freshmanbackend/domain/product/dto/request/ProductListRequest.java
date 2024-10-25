@@ -1,4 +1,4 @@
-package com.freshman.freshmanbackend.domain.product.request;
+package com.freshman.freshmanbackend.domain.product.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

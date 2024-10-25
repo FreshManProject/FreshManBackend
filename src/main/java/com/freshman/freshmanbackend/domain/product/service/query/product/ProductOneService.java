@@ -1,8 +1,8 @@
 package com.freshman.freshmanbackend.domain.product.service.query.product;
 
 import com.freshman.freshmanbackend.domain.product.domain.Product;
+import com.freshman.freshmanbackend.domain.product.dto.response.ProductDetailResponse;
 import com.freshman.freshmanbackend.domain.product.repository.ProductRepository;
-import com.freshman.freshmanbackend.domain.product.response.ProductDetailResponse;
 import com.freshman.freshmanbackend.global.common.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

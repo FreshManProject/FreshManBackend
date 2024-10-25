@@ -1,4 +1,4 @@
-package com.freshman.freshmanbackend.domain.product.request;
+package com.freshman.freshmanbackend.domain.product.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 public class ProductCategoryEntryRequest {
 
-  /**
-   * 카테고리명
-   */
-  private String name;
+    /**
+     * 카테고리명
+     */
+    private String name;
 }

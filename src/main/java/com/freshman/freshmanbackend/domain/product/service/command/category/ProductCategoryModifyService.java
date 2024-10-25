@@ -1,7 +1,7 @@
 package com.freshman.freshmanbackend.domain.product.service.command.category;
 
 import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
-import com.freshman.freshmanbackend.domain.product.request.ProductCategoryModifyRequest;
+import com.freshman.freshmanbackend.domain.product.dto.request.ProductCategoryModifyRequest;
 import com.freshman.freshmanbackend.domain.product.service.query.category.ProductCategoryOneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

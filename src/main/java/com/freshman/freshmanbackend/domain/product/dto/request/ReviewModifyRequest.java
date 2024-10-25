@@ -1,4 +1,4 @@
-package com.freshman.freshmanbackend.domain.product.request;
+package com.freshman.freshmanbackend.domain.product.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class ReviewModifyRequest {
      * 별점
      */
     private Byte score;
-    
+
     /**
      * 이미지
      */

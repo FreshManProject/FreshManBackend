@@ -1,16 +1,14 @@
 package com.freshman.freshmanbackend.domain.product.dao;
 
 import com.freshman.freshmanbackend.domain.member.domain.QMember;
-import com.freshman.freshmanbackend.domain.product.domain.QReview;
 import com.freshman.freshmanbackend.domain.product.domain.QReviewComment;
-import com.freshman.freshmanbackend.domain.product.response.ReviewCommentResponse;
+import com.freshman.freshmanbackend.domain.product.dto.response.ReviewCommentResponse;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,12 +17,13 @@ public class ReviewCommentListDao {
 
     /**
      * 후기 댓글 리스트 조회
+     *
      * @param reviewSeq
      * @param page
      * @param pageSize
      * @return 후기 댓글 리스트
      */
-    public List<ReviewCommentResponse> getReviewCommentsByReviewSeq(Long reviewSeq, int page, int pageSize){
+    public List<ReviewCommentResponse> getReviewCommentsByReviewSeq(Long reviewSeq, int page, int pageSize) {
         QReviewComment reviewComment = QReviewComment.reviewComment;
         QMember member = QMember.member;
 
@@ -41,12 +40,13 @@ public class ReviewCommentListDao {
 
     /**
      * 후기 대댓글 리스트 조회
+     *
      * @param commentSeq
      * @param page
      * @param pageSize
      * @return 후기 대댓글 리스트
      */
-    public List<ReviewCommentResponse> getReviewCommentsByParentComment(Long commentSeq, int page, int pageSize){
+    public List<ReviewCommentResponse> getReviewCommentsByParentComment(Long commentSeq, int page, int pageSize) {
         QReviewComment reviewComment = QReviewComment.reviewComment;
         QMember member = QMember.member;
 
@@ -64,6 +64,7 @@ public class ReviewCommentListDao {
     private ConstructorExpression<ReviewCommentResponse> getProjection() {
         QMember member = QMember.member;
         QReviewComment reviewComment = QReviewComment.reviewComment;
-        return Projections.constructor(ReviewCommentResponse.class, reviewComment.commentSeq, member.name, reviewComment.content, reviewComment.createdAt);
+        return Projections.constructor(ReviewCommentResponse.class, reviewComment.commentSeq, member.name,
+                reviewComment.content, reviewComment.createdAt);
     }
 }
