@@ -1,6 +1,7 @@
 package com.freshman.freshmanbackend.domain.product.service.query.product;
 
 import com.freshman.freshmanbackend.domain.product.dao.ProductListDao;
+import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.dto.response.ProductListResponse;
@@ -32,13 +33,26 @@ public class ProductListService {
     @Transactional(readOnly = true)
     public NoOffsetPageResponse getList(ProductListRequest param) {
         Boolean isEnd = true;
+        Long nextSeq = null;
+        Long nextPrice = null;
         List<Long> productsPageSeqList = productListDao.getProductsPageSeqList(param);
+
+        String sort = param.getSort();
+        List<ProductListResponse> products = productListDao.getProductInfo(productsPageSeqList, sort);
+
         if (productsPageSeqList.size() == PAGE_SIZE + 1) {
-            productsPageSeqList.remove(PAGE_SIZE);
+            nextSeq = productsPageSeqList.get(PAGE_SIZE);
+
+            if (sort != null && (sort.equals(ProductSortType.HIGHEST.getCode()) || sort.equals(
+                    ProductSortType.LOWEST.getCode()))) {
+                nextPrice = products.get(PAGE_SIZE).getPrice();
+            }
+            
+            products.remove(PAGE_SIZE);
             isEnd = false;
         }
-        List<ProductListResponse> products = productListDao.getProductInfo(productsPageSeqList, param.getSort());
-        return new NoOffsetPageResponse(products, isEnd);
+
+        return new NoOffsetPageResponse(products, isEnd, nextSeq, nextPrice);
     }
 
     /**
