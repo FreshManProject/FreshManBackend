@@ -1,9 +1,9 @@
 package com.freshman.freshmanbackend.domain.product.service.query.product;
 
 import com.freshman.freshmanbackend.domain.product.dao.ProductListDao;
-import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
-import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
-import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
+import com.freshman.freshmanbackend.domain.product.dto.request.ProductListRequest;
+import com.freshman.freshmanbackend.domain.product.dto.request.ProductSearchRequest;
+import com.freshman.freshmanbackend.domain.product.dto.response.ProductListResponse;
 import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
 import com.freshman.freshmanbackend.global.common.response.NoOffsetPageResponse;
 import java.util.List;
@@ -32,11 +32,12 @@ public class ProductListService {
     @Transactional(readOnly = true)
     public NoOffsetPageResponse getList(ProductListRequest param) {
         Boolean isEnd = true;
-        List<ProductListResponse> products = productListDao.select(param);
-        if (products.size() == PAGE_SIZE + 1) {
-            products.remove(PAGE_SIZE);
+        List<Long> productsPageSeqList = productListDao.getProductsPageSeqList(param);
+        if (productsPageSeqList.size() == PAGE_SIZE + 1) {
+            productsPageSeqList.remove(PAGE_SIZE);
             isEnd = false;
         }
+        List<ProductListResponse> products = productListDao.getProductInfo(productsPageSeqList, param.getSort());
         return new NoOffsetPageResponse(products, isEnd);
     }
 
