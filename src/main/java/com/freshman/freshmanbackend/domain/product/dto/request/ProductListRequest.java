@@ -28,7 +28,11 @@ public class ProductListRequest {
     private String sort;
 
     /**
-     * 페이지
+     * 읽기 시작할 productSeq
      */
-    private Integer page = 0;
+    private Long nextSeq;
+    /**
+     * 읽기 시작할 price
+     */
+    private Long nextPrice;
 }
