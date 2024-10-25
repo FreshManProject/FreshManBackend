@@ -4,9 +4,9 @@ import com.freshman.freshmanbackend.domain.product.domain.QProduct;
 import com.freshman.freshmanbackend.domain.product.domain.QProductLike;
 import com.freshman.freshmanbackend.domain.product.domain.QProductSale;
 import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
-import com.freshman.freshmanbackend.domain.product.request.ProductListRequest;
-import com.freshman.freshmanbackend.domain.product.request.ProductSearchRequest;
-import com.freshman.freshmanbackend.domain.product.response.ProductListResponse;
+import com.freshman.freshmanbackend.domain.product.dto.request.ProductListRequest;
+import com.freshman.freshmanbackend.domain.product.dto.request.ProductSearchRequest;
+import com.freshman.freshmanbackend.domain.product.dto.response.ProductListResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.OrderSpecifier;
@@ -27,6 +27,12 @@ public class ProductListDao {
     private static final int PAGE_SIZE = 10;
     private final JPAQueryFactory queryFactory;
 
+    /**
+     * 어드민용 상품 전체 목록 조회
+     *
+     * @param page
+     * @return
+     */
     public List<ProductListResponse> selectAll(int page) {
         QProduct product = QProduct.product;
         QProductSale sale = QProductSale.productSale;
@@ -43,12 +49,30 @@ public class ProductListDao {
     }
 
     /**
-     * 상품 목록 조회
+     * 상품 아이디만 조회
      *
-     * @param param 요청 파라미터
-     * @return 상품 목록
+     * @param param
+     * @return
      */
-    public List<ProductListResponse> select(ProductListRequest param) {
+    public List<Long> getProductsPageSeqList(ProductListRequest param) {
+        QProduct product = QProduct.product;
+        return queryFactory.select(product.productSeq)
+                .from(product)
+                .where(getCondition(param))
+                .orderBy(getOrder(param.getSort()))
+                .offset(PAGE_SIZE * param.getPage())
+                .limit(PAGE_SIZE + 1)
+                .fetch();
+    }
+
+    /**
+     * 상품 정보 조회
+     *
+     * @param productSeqList
+     * @param sort
+     * @return
+     */
+    public List<ProductListResponse> getProductInfo(List<Long> productSeqList, String sort) {
         QProduct product = QProduct.product;
         QProductSale sale = QProductSale.productSale;
         QProductLike productLike = QProductLike.productLike;
@@ -61,10 +85,8 @@ public class ProductListDao {
                         sale.saleStartAt.loe(curTime).and(sale.saleEndAt.goe(curTime)))
                 .leftJoin(productLike)
                 .on(productLike.productLikeKey.product.productSeq.eq(product.productSeq))
-                .where(getCondition(param))
-                .orderBy(getOrder(param.getSort()))
-                .offset(PAGE_SIZE * param.getPage())
-                .limit(PAGE_SIZE + 1)
+                .where(product.productSeq.in(productSeqList))
+                .orderBy(getOrder(sort))
                 .fetch();
     }
 
@@ -83,8 +105,7 @@ public class ProductListDao {
         return queryFactory.select(getProjection())
                 .from(product)
                 .leftJoin(sale)
-                .on(sale.productSeq.eq(product.productSeq),
-                        sale.saleStartAt.loe(curTime).and(sale.saleEndAt.goe(curTime)))
+                .on(sale.productSeq.eq(product.productSeq))
                 .leftJoin(productLike)
                 .on(productLike.productLikeKey.product.productSeq.eq(product.productSeq))
                 .where(getCondition(param))
