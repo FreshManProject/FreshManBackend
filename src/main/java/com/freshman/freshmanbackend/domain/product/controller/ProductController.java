@@ -152,7 +152,7 @@ public class ProductController {
      */
     @GetMapping("/categories")
     public ResponseEntity<?> doGetCategoryList() {
-        return ResponseEntity.ok(new ListResponse(productCategoryListService.getList()));
+        return ResponseEntity.ok(new ListResponse(productCategoryListService.getList().getCategories()));
     }
 
     /**
