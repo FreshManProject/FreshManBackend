@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
 import com.freshman.freshmanbackend.domain.product.repository.ProductCategoryRepository;
 import com.freshman.freshmanbackend.domain.product.service.query.category.ProductCategoryOneService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class ProductCategoryDeleteService {
      * @param categorySeq 카테고리 일련번호
      */
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     public void delete(Long categorySeq) {
         // 카테고리 조회
         ProductCategory category = productCategoryOneService.getOne(categorySeq);

@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductCategoryEntryRequest;
 import com.freshman.freshmanbackend.domain.product.repository.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class ProductCategoryEntryService {
      * @param param 요청 파라미터
      */
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     public void entry(ProductCategoryEntryRequest param) {
         // 순서 조회
         int order =
@@ -29,6 +31,6 @@ public class ProductCategoryEntryService {
                         .orElse(1);
 
         // 카테고리 등록
-        productCategoryRepository.save(new ProductCategory(param.getName(), order));
+        ProductCategory category = productCategoryRepository.save(new ProductCategory(param.getName(), order));
     }
 }

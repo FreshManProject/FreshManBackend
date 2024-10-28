@@ -4,6 +4,7 @@ import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductCategoryModifyRequest;
 import com.freshman.freshmanbackend.domain.product.service.query.category.ProductCategoryOneService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class ProductCategoryModifyService {
      * @param param 요청 파라미터
      */
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     public void modify(ProductCategoryModifyRequest param) {
         // 카테고리 조회
         ProductCategory category = productCategoryOneService.getOne(param.getCategorySeq());

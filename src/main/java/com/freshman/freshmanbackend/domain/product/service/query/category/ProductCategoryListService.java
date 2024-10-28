@@ -25,7 +25,7 @@ public class ProductCategoryListService {
      * @return 상품 카테고리 목록
      */
     @Transactional(readOnly = true)
-    @Cacheable(value = "category")
+    @Cacheable(value = "categories")
     public ProductCategoryListResponse getList() {
         return new ProductCategoryListResponse(
                 productCategoryRepository.findAll()
