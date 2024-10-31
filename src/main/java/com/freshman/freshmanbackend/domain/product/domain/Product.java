@@ -1,5 +1,6 @@
 package com.freshman.freshmanbackend.domain.product.domain;
 
+import com.freshman.freshmanbackend.domain.order.domain.Order;
 import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
@@ -97,6 +98,13 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST,
             CascadeType.MERGE})
     private List<Question> questionList = new ArrayList<>();
+
+    /**
+     * 주문 리스트
+     */
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST,
+            CascadeType.MERGE})
+    private List<Order> orders = new ArrayList<>();
 
     public Product(String name, Long price, String description, String brand, ProductCategory category) {
         this.name = name;
