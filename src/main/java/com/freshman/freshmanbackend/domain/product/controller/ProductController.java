@@ -8,6 +8,7 @@ import com.freshman.freshmanbackend.domain.product.dto.request.ProductListReques
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductModifyRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductSearchRequest;
+import com.freshman.freshmanbackend.domain.product.dto.request.ProductStockUpdateRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ReviewCommentEntryRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ReviewCommentModifyRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ReviewEntryRequest;
@@ -20,6 +21,7 @@ import com.freshman.freshmanbackend.domain.product.service.command.like.ProductL
 import com.freshman.freshmanbackend.domain.product.service.command.product.ProductDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.product.ProductEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.product.ProductModifyService;
+import com.freshman.freshmanbackend.domain.product.service.command.product.ProductStockModifyService;
 import com.freshman.freshmanbackend.domain.product.service.command.review.ReviewDeleteService;
 import com.freshman.freshmanbackend.domain.product.service.command.review.ReviewEntryService;
 import com.freshman.freshmanbackend.domain.product.service.command.review.ReviewModifyService;
@@ -57,6 +59,8 @@ public class ProductController {
     private final ProductDeleteService productDeleteService;
     private final ProductListService productListService;
     private final ProductOneService productOneService;
+    private final ProductStockModifyService productStockModifyService;
+
 
     private final ProductCategoryEntryService productCategoryEntryService;
     private final ProductCategoryModifyService productCategoryModifyService;
@@ -396,5 +400,14 @@ public class ProductController {
     public ResponseEntity<?> doGeAllProducts(@RequestParam("page") int page) {
         NoOffsetPageResponse allList = productListService.getAllList(page);
         return ResponseEntity.ok(allList);
+    }
+
+    /**
+     * 상품 재고 업데이트
+     */
+    @PostMapping("/stock")
+    public ResponseEntity<?> updateProductStock(@RequestBody ProductStockUpdateRequest request) {
+        productStockModifyService.updateProductStock(request);
+        return ResponseEntity.ok(new SuccessResponse());
     }
 }
