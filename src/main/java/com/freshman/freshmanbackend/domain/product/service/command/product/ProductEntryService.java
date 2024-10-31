@@ -4,9 +4,11 @@ import com.freshman.freshmanbackend.domain.product.domain.Product;
 import com.freshman.freshmanbackend.domain.product.domain.ProductCategory;
 import com.freshman.freshmanbackend.domain.product.domain.ProductImage;
 import com.freshman.freshmanbackend.domain.product.domain.ProductSale;
+import com.freshman.freshmanbackend.domain.product.domain.ProductStock;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductEntryRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductSaleRequest;
 import com.freshman.freshmanbackend.domain.product.repository.ProductRepository;
+import com.freshman.freshmanbackend.domain.product.repository.ProductStockRepository;
 import com.freshman.freshmanbackend.domain.product.service.query.category.ProductCategoryOneService;
 import com.freshman.freshmanbackend.domain.product.service.query.product.ProductOneService;
 import com.freshman.freshmanbackend.global.cloud.service.S3UploadService;
@@ -32,6 +34,7 @@ public class ProductEntryService {
     private final ProductOneService productOneService;
     private final ProductCategoryOneService productCategoryOneService;
     private final S3UploadService s3UploadService;
+    private final ProductStockRepository productStockRepository;
 
     /**
      * 상품 등록
@@ -66,6 +69,7 @@ public class ProductEntryService {
                 throw new ValidationException("s3.save_failed");
             }
         }
+        productStockRepository.save(new ProductStock(0, product));
         product.addImageList(imageList);
     }
 
