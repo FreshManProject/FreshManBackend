@@ -5,6 +5,7 @@ import com.freshman.freshmanbackend.domain.member.domain.enums.Role;
 import com.freshman.freshmanbackend.domain.member.request.MemberAddressUpdateRequest;
 import com.freshman.freshmanbackend.domain.member.request.MemberInfoUpdateRequest;
 import com.freshman.freshmanbackend.domain.member.request.MemberUpdateRequest;
+import com.freshman.freshmanbackend.domain.order.domain.Order;
 import com.freshman.freshmanbackend.domain.question.domain.Question;
 import com.freshman.freshmanbackend.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
@@ -66,6 +67,10 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST,
             CascadeType.MERGE})
     private List<Cart> carts;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true, cascade = {CascadeType.PERSIST,
+            CascadeType.MERGE})
+    private List<Order> orders;
 
     public Member(String oauth2Id, Role role) {
         this.oauth2Id = oauth2Id;
