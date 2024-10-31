@@ -10,6 +10,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 상품 재고
@@ -23,6 +24,7 @@ public class ProductStock {
     @Column(name = "PRD_SEQ")
     private Long productSeq;
     @Column(name = "PRD_STK_CNT", nullable = false)
+    @Setter
     private Integer productStockCount;
 
     @MapsId
@@ -37,5 +39,9 @@ public class ProductStock {
 
     public void decreaseStock(int count) {
         productStockCount -= count;
+    }
+
+    public void increaseStock(int count) {
+        productStockCount += count;
     }
 }
