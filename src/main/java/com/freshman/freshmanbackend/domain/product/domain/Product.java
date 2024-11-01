@@ -86,6 +86,11 @@ public class Product extends BaseTimeEntity {
     @Column(name = "PRD_LIK_CNT")
     private Integer likeCount;
     /**
+     * 구매 개수
+     */
+    @Column(name = "PRD_ORD_CNT")
+    private Integer orderCount;
+    /**
      * 상품 할인정보
      */
     @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true,
@@ -198,5 +203,9 @@ public class Product extends BaseTimeEntity {
      */
     public void decreaseLikes() {
         likeCount--;
+    }
+
+    public void increaseOrderCount(int orderCount) {
+        this.orderCount += orderCount;
     }
 }
