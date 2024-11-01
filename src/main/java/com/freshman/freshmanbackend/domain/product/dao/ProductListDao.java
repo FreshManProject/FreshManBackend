@@ -125,7 +125,9 @@ public class ProductListDao {
         // 유효여부
         booleanBuilder.and(product.valid.eq(Boolean.TRUE));
         // 카테고리
-        booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));
+        if (param.getCategorySeq() != null) {
+            booleanBuilder.and(product.category.categorySeq.eq(param.getCategorySeq()));
+        }
 
         //최신순 NoOffset 조건
         if (StringUtils.isBlank(param.getSort())) {
@@ -141,18 +143,22 @@ public class ProductListDao {
                 booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
             }
         } else if (StringUtils.equals(param.getSort(), ProductSortType.HIGHEST.getCode())) {//높은 가격 NoOffset 조건
-            if (param.getNextPrice() != null) {
-                booleanBuilder.and(product.price.loe(param.getNextPrice()));
-            }
-            if (param.getNextSeq() != null) {
+            if (param.getNextPrice() != null && param.getNextSeq() != null) {
+                booleanBuilder.and(product.price.eq(param.getNextPrice()));
                 booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
+                booleanBuilder.or(product.price.lt(param.getNextPrice()));
             }
         } else if (StringUtils.equals(param.getSort(), ProductSortType.LOWEST.getCode())) {//낮은 가격 순 NoOffset 조건
-            if (param.getNextPrice() != null) {
-                booleanBuilder.and(product.price.goe(param.getNextPrice()));
-            }
-            if (param.getNextSeq() != null) {
+            if (param.getNextPrice() != null && param.getNextSeq() != null) {
+                booleanBuilder.and(product.price.eq(param.getNextPrice()));
                 booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
+                booleanBuilder.or(product.price.gt(param.getLowPrice()));
+            }
+        } else if (StringUtils.equals(param.getSort(), ProductSortType.HOTTEST.getCode())) { //인기순 NoOffset 조건
+            if (param.getNextOrderCount() != null && param.getNextSeq() != null) {
+                booleanBuilder.and(product.orderCount.eq(param.getNextOrderCount()));
+                booleanBuilder.and(product.productSeq.loe(param.getNextSeq()));
+                booleanBuilder.or(product.orderCount.lt(param.getNextOrderCount()));
             }
         }
 
@@ -215,8 +221,12 @@ public class ProductListDao {
             orderSpecifiers.add(product.price.desc());
             orderSpecifiers.add(product.productSeq.desc());
             return orderSpecifiers.toArray(OrderSpecifier[]::new);
-        } else {//낮은 가격순
+        } else if (StringUtils.equals(sort, ProductSortType.LOWEST.getCode())) {//낮은 가격순
             orderSpecifiers.add(product.price.asc());
+            orderSpecifiers.add(product.productSeq.desc());
+            return orderSpecifiers.toArray(OrderSpecifier[]::new);
+        } else { // 인기순
+            orderSpecifiers.add(product.orderCount.desc());
             orderSpecifiers.add(product.productSeq.desc());
             return orderSpecifiers.toArray(OrderSpecifier[]::new);
         }
@@ -227,6 +237,6 @@ public class ProductListDao {
         QProductSale sale = QProductSale.productSale;
         QProductLike productLike = QProductLike.productLike;
         return Projections.constructor(ProductListResponse.class, product.productSeq, product.name, product.price,
-                sale.salePrice, product.brand, product.thumbnailImage, productLike.isNotNull());
+                sale.salePrice, product.brand, product.thumbnailImage, productLike.isNotNull(), product.orderCount);
     }
 }
