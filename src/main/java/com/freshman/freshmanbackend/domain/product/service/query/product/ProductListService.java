@@ -5,10 +5,13 @@ import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductSearchRequest;
 import com.freshman.freshmanbackend.domain.product.dto.response.ProductListResponse;
+import com.freshman.freshmanbackend.domain.product.dto.response.ProductRankingResponse;
 import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
 import com.freshman.freshmanbackend.global.common.response.NoOffsetPageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +38,7 @@ public class ProductListService {
         Boolean isEnd = true;
         Long nextSeq = null;
         Long nextPrice = null;
+        Integer nextOrderCount = null;
         List<Long> productsPageSeqList = productListDao.getProductsPageSeqList(param);
 
         String sort = param.getSort();
@@ -46,13 +50,15 @@ public class ProductListService {
             if (sort != null && (sort.equals(ProductSortType.HIGHEST.getCode()) || sort.equals(
                     ProductSortType.LOWEST.getCode()))) {
                 nextPrice = products.get(PAGE_SIZE).getPrice();
+            } else if (sort != null && (sort.equals(ProductSortType.HOTTEST.getCode()))) {
+                nextOrderCount = products.get(PAGE_SIZE).getOrderCount();
             }
-            
+
             products.remove(PAGE_SIZE);
             isEnd = false;
         }
 
-        return new NoOffsetPageResponse(products, isEnd, nextSeq, nextPrice);
+        return new NoOffsetPageResponse(products, isEnd, nextSeq, nextPrice, nextOrderCount);
     }
 
     /**
@@ -83,5 +89,26 @@ public class ProductListService {
             isEnd = false;
         }
         return new NoOffsetPageResponse(products, isEnd);
+    }
+
+    /**
+     * 랭킹 조회
+     */
+    @Cacheable("ranking")
+    public ProductRankingResponse getRankingProducts() {
+        List<Long> productsPageSeqList = productListDao.getProductsPageSeqList(
+                new ProductListRequest(ProductSortType.HOTTEST.getCode()));
+        List<ProductListResponse> productInfo = productListDao.getProductInfo(productsPageSeqList,
+                ProductSortType.HOTTEST.getCode());
+        return new ProductRankingResponse(productInfo);
+    }
+
+    @CachePut(value = "ranking")
+    public ProductRankingResponse cacheUpdate() {
+        List<Long> productsPageSeqList = productListDao.getProductsPageSeqList(
+                new ProductListRequest(ProductSortType.HOTTEST.getCode()));
+        List<ProductListResponse> productInfo = productListDao.getProductInfo(productsPageSeqList,
+                ProductSortType.HOTTEST.getCode());
+        return new ProductRankingResponse(productInfo);
     }
 }
