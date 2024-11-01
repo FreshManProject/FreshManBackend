@@ -54,6 +54,7 @@ public class RedisConfig {
 
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
         redisCacheConfigurationMap.put("categories", redisCacheConfiguration.entryTtl(Duration.ofHours(1)));
+        redisCacheConfigurationMap.put("ranking", redisCacheConfiguration.entryTtl(Duration.ofHours(1)));
 
         return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(connectionFactory)
