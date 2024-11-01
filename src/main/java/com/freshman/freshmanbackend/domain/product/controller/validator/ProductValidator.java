@@ -158,8 +158,6 @@ public class ProductValidator {
      * @param param 요청 파라미터
      */
     public void validate(ProductListRequest param) {
-        // 카테고리 일련번호
-        validateNull(param.getCategorySeq(), "product.param_category_null");
         // 낮은 가격 > 높은 가격 체크
         if (param.getLowPrice() != null && param.getHighPrice() != null) {
             if (param.getLowPrice() > param.getHighPrice()) {

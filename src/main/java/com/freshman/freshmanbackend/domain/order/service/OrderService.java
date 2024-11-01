@@ -44,6 +44,7 @@ public class OrderService {
         Product product = productRepository.findById(orderRequest.getProductSeq())
                 .orElseThrow(() -> new ValidationException("product.not_found"));
 
+        product.increaseOrderCount(orderRequest.getOrderCount());
         price = applySale(price, product);
 
         //주문 저장
