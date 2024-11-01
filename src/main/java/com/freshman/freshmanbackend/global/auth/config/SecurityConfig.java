@@ -8,7 +8,9 @@ import com.freshman.freshmanbackend.global.auth.handler.RestAuthenticationEntryP
 import com.freshman.freshmanbackend.global.auth.service.CustomOAuth2UserService;
 import com.freshman.freshmanbackend.global.auth.util.JwtUtil;
 import com.freshman.freshmanbackend.global.redis.service.RedisRefreshTokenService;
-
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,11 +23,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Collections;
-
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-
 /**
  * 스프링 시큐리티 설정
  */
@@ -33,47 +30,56 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
-  private final CustomOAuth2UserService customOAuth2UserService;
-  private final LoginSuccessHandler loginSuccessHandler;
-  private final RedisRefreshTokenService redisRefreshTokenService;
-  private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final RedisRefreshTokenService redisRefreshTokenService;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil, MemberRepository memberRepository)
-      throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable)
-        .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-          @Override
-          public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil,
+                                                   MemberRepository memberRepository)
+            throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
-            CorsConfiguration configuration = new CorsConfiguration();
+                        CorsConfiguration configuration = new CorsConfiguration();
 
-            configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
-            configuration.setAllowedMethods(Collections.singletonList("*"));
-            configuration.setAllowCredentials(true);
-            configuration.setAllowedHeaders(Collections.singletonList("*"));
-            configuration.setMaxAge(3600L);
+                        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+                        configuration.setAllowedMethods(Collections.singletonList("*"));
+                        configuration.setAllowCredentials(true);
+                        configuration.setAllowedHeaders(Collections.singletonList("*"));
+                        configuration.setMaxAge(3600L);
 
-            configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-            configuration.setExposedHeaders(Collections.singletonList("access_token"));
+                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+                        configuration.setExposedHeaders(Collections.singletonList("access_token"));
 
-            return configuration;
-          }
-        }))
-        .formLogin(AbstractHttpConfigurer::disable)
-        .httpBasic(AbstractHttpConfigurer::disable)
-        .oauth2Login((oauth2) -> oauth2.userInfoEndpoint(
-                                           (userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
-                                       .successHandler(loginSuccessHandler))
-        .exceptionHandling(
-            exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint))
-        .addFilterBefore(new JwtFilter(jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(new JwtLogoutFilter(jwtUtil, redisRefreshTokenService), LogoutFilter.class)
-        .authorizeHttpRequests(
-            (auth) -> auth.requestMatchers("/reissue", "/products/**", "/admin/login").permitAll()
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .anyRequest().authenticated())
-        .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-    return http.build();
-  }
+                        return configuration;
+                    }
+                }))
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .oauth2Login((oauth2) -> oauth2.userInfoEndpoint(
+                                (userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
+                        .successHandler(loginSuccessHandler))
+                .exceptionHandling(
+                        exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint))
+                .addFilterBefore(new JwtFilter(jwtUtil, memberRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtLogoutFilter(jwtUtil, redisRefreshTokenService), LogoutFilter.class)
+                .authorizeHttpRequests(
+                        (auth) -> auth.requestMatchers(getPermittedUrls()).permitAll()
+                                .requestMatchers(getAdminUrls()).hasRole("ADMIN")
+                                .anyRequest().authenticated())
+                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
+
+    private String[] getPermittedUrls() {
+        return new String[]{"/reissue", "/products/**", "/admin/login", "/actuator/**"};
+    }
+
+    private String[] getAdminUrls() {
+        return new String[]{"/admin/**"};
+    }
 }
