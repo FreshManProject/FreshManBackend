@@ -2,42 +2,45 @@ package com.freshman.freshmanbackend.domain.product.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 상품 목록 조회 응답
  */
 @Getter
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductListResponse {
 
     /**
      * 상품 일련번호
      */
-    private final Long productSeq;
+    private Long productSeq;
     /**
      * 상품명
      */
-    private final String name;
+    private String name;
     /**
      * 가격
      */
-    private final Long price;
+    private Long price;
     /**
      * 브랜드명
      */
-    private final String brand;
+    private String brand;
     /**
      * 목록 이미지
      */
-    private final String image;
-    private final Boolean liked;
+    private String image;
+    private Boolean liked;
+    private Integer orderCount;
     /**
      * 할인 정보
      */
     private Sale sale;
 
     public ProductListResponse(Long productSeq, String name, Long price, Long salePrice, String brand, String image,
-                               Boolean liked) {
+                               Boolean liked, Integer orderCount) {
         this.productSeq = productSeq;
         this.name = name;
         this.price = price;
@@ -47,6 +50,7 @@ public class ProductListResponse {
         this.brand = brand;
         this.image = image;
         this.liked = liked;
+        this.orderCount = orderCount;
     }
 
     @Getter

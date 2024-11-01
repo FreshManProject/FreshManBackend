@@ -1,6 +1,7 @@
 package com.freshman.freshmanbackend.domain.product.dto.request;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class ProductListRequest {
 
     /**
@@ -35,4 +37,13 @@ public class ProductListRequest {
      * 읽기 시작할 price
      */
     private Long nextPrice;
+    /**
+     * 읽기 시작할 판매량
+     */
+    private Integer nextOrderCount;
+
+
+    public ProductListRequest(String sort) {
+        this.sort = sort;
+    }
 }
