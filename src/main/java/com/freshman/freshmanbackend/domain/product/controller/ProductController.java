@@ -13,6 +13,7 @@ import com.freshman.freshmanbackend.domain.product.dto.request.ReviewCommentEntr
 import com.freshman.freshmanbackend.domain.product.dto.request.ReviewCommentModifyRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ReviewEntryRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ReviewModifyRequest;
+import com.freshman.freshmanbackend.domain.product.dto.request.SaleProductListRequest;
 import com.freshman.freshmanbackend.domain.product.dto.response.ProductRankingResponse;
 import com.freshman.freshmanbackend.domain.product.service.SearchLogService;
 import com.freshman.freshmanbackend.domain.product.service.command.category.ProductCategoryDeleteService;
@@ -419,5 +420,14 @@ public class ProductController {
     public ResponseEntity<?> getRankingProducts() {
         ProductRankingResponse rankingProducts = productListService.getRankingProducts();
         return ResponseEntity.ok(new ListResponse(rankingProducts.getProducts()));
+    }
+
+    /**
+     * 세일 상품 조회
+     */
+    @GetMapping("/sale-rank")
+    public ResponseEntity<?> getSaleRanks(@ModelAttribute SaleProductListRequest request) {
+        NoOffsetPageResponse saleList = productListService.getSaleList(request);
+        return ResponseEntity.ok(saleList);
     }
 }

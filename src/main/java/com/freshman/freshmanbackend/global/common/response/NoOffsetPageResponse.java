@@ -30,12 +30,10 @@ public class NoOffsetPageResponse extends SuccessResponse {
         this.nextOrderCount = nextOrderCount;
     }
 
-    public NoOffsetPageResponse(Collection<?> list, Boolean isEnd, Long nextSeq,
-                                Integer nextOrderCount) {
+    public NoOffsetPageResponse(Collection<?> list, Boolean isEnd, Long nextSeq) {
         this.list = list;
         this.isEnd = isEnd;
         this.count = list == null ? 0 : list.size();
         this.nextSeq = nextSeq;
-        this.nextOrderCount = nextOrderCount;
     }
 }

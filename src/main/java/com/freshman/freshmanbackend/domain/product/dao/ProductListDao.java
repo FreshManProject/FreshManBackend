@@ -6,6 +6,7 @@ import com.freshman.freshmanbackend.domain.product.domain.QProductSale;
 import com.freshman.freshmanbackend.domain.product.domain.enums.ProductSortType;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductListRequest;
 import com.freshman.freshmanbackend.domain.product.dto.request.ProductSearchRequest;
+import com.freshman.freshmanbackend.domain.product.dto.request.SaleProductListRequest;
 import com.freshman.freshmanbackend.domain.product.dto.response.ProductListResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ConstructorExpression;
@@ -61,6 +62,23 @@ public class ProductListDao {
                 .from(product)
                 .where(getCondition(param))
                 .orderBy(getOrder(param.getSort()))
+                .limit(PAGE_SIZE + 1)
+                .fetch();
+    }
+
+    /**
+     * 세일 상품 아이디 목록 조회
+     *
+     * @param request
+     * @return
+     */
+    public List<Long> getSaleProductPageList(SaleProductListRequest request) {
+        QProductSale sale = QProductSale.productSale;
+
+        return queryFactory.select(sale.productSeq)
+                .from(sale)
+                .where(getSaleCondition(request))
+                .orderBy(sale.productSeq.desc())
                 .limit(PAGE_SIZE + 1)
                 .fetch();
     }
@@ -170,6 +188,21 @@ public class ProductListDao {
         // 높은 가격 제한
         if (param.getHighPrice() != null) {
             booleanBuilder.and(product.price.loe(param.getHighPrice()));
+        }
+
+        return booleanBuilder;
+    }
+
+    private BooleanBuilder getSaleCondition(SaleProductListRequest request) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        LocalDateTime now = LocalDateTime.now();
+        QProductSale sale = QProductSale.productSale;
+
+        booleanBuilder.and(sale.saleStartAt.loe(now));
+        booleanBuilder.and(sale.saleEndAt.gt(now));
+
+        if (request.getNextSeq() != null) {
+            booleanBuilder.and(sale.productSeq.loe(request.getNextSeq()));
         }
 
         return booleanBuilder;
