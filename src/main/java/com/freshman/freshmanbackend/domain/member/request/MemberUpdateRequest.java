@@ -2,7 +2,9 @@ package com.freshman.freshmanbackend.domain.member.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -10,6 +12,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class MemberUpdateRequest {
     @NotNull
     private String name;
