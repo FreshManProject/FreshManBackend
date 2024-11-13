@@ -42,10 +42,11 @@ public class MemberService {
      * 멤버 저장
      */
     @Transactional
-    public void save(MemberUpdateRequest request) {
+    public Member save(MemberUpdateRequest request) {
         String oauth2Id = AuthMemberUtils.getUserOauth2Id();
         Member member = memberRepository.findByOauth2Id(oauth2Id);
         member.registerMember(request);
+        return member;
     }
 
     /**
@@ -64,10 +65,11 @@ public class MemberService {
      * @param request 회원 개인정보
      */
     @Transactional
-    public void updateInfo(MemberInfoUpdateRequest request) {
+    public Member updateInfo(MemberInfoUpdateRequest request) {
         String userOauth2Id = AuthMemberUtils.getUserOauth2Id();
         Member member = memberRepository.findByOauth2Id(userOauth2Id);
         member.updateInfo(request);
+        return member;
     }
 
     /**
@@ -76,9 +78,10 @@ public class MemberService {
      * @param request 회원 주소
      */
     @Transactional
-    public void updateAddress(MemberAddressUpdateRequest request) {
+    public Member updateAddress(MemberAddressUpdateRequest request) {
         String userOauth2Id = AuthMemberUtils.getUserOauth2Id();
         Member member = memberRepository.findByOauth2Id(userOauth2Id);
         member.updateAddress(request);
+        return member;
     }
 }
